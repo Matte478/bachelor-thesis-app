@@ -3,12 +3,8 @@
         <div class="container">
             <div class="row align-items-center justify-content-center">
                 <div class="col-sm-10">
-                    <form class="form" action="#" @submit.prevent="registerClient">
-                        <div class="form__header">
-                            <h2 class="form__header_title">Registrácia spoločnosti</h2>
-                            <p class="form__header_subtitle">Registrujte vašu spoločnosť</p>
-                        </div>
-                        <div class="form__body">
+                    <obd-card card-title="Registrácia spoločnosti" card-subtitle="Registrujte vašu spoločnosť">
+                        <form class="form" action="#" @submit.prevent="registerClient">
                             <div class="row justify-content-around">
                                 <div class="col-sm-6">
                                     <div class="form-group">
@@ -64,10 +60,10 @@
                             </div>
 
                             <div class="form-group">
-                                <button type="submit" class="btn">Registrácia</button>
+                                <obd-button type="submit">Registrácia</obd-button>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </obd-card>
                 </div>
             </div>
         </div>
@@ -98,6 +94,9 @@ export default {
             })
             .then(() => {
                 this.$router.push({ name: 'login' });
+                this.flashSuccess('Boli ste úspešne zaregistrovaný, môžete sa prihlásiť.', {
+                    timeout: 3000,
+                });
             })
         }
     }

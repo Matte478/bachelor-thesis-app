@@ -94,6 +94,9 @@ export default {
             })
             .then(() => {
                 this.$router.push({ name: 'login' });
+                this.flashSuccess('Boli ste úspešne zaregistrovaný, môžete sa prihlásiť.', {
+                    timeout: 3000,
+                });
             })
         }
     }

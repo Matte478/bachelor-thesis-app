@@ -6,10 +6,12 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import Master from './components/layouts/Master'
 // import Home from './components/pages/Home'
 import {store} from './store/store'
+import VueFlashMessage from 'vue-flash-message'
 
-import { applyPolyfills, defineCustomElements } from 'obedovac-components/loader';
+import { applyPolyfills, defineCustomElements } from 'obedovac-components/loader'
 import 'bootstrap/dist/css/bootstrap-grid.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+require('vue-flash-message/dist/vue-flash-message.min.css');
 
 Vue.config.productionTip = false
 
@@ -26,6 +28,7 @@ applyPolyfills().then(() => {
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+Vue.use(VueFlashMessage)
 
 const router = new VueRouter({
   routes: routes,

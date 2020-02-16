@@ -48,6 +48,9 @@ export default {
            })
            .then(() => {
                this.$router.push({ name: 'home' });
+               this.flashSuccess('Boli ste úspešne prihlásený.', {
+                    timeout: 3000,
+                });
            })
         }
     }

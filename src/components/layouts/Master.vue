@@ -25,6 +25,7 @@
             </div>
         </nav>
         <router-view></router-view>
+        <flash-message class="flash-message"></flash-message>
     </div>
 </template>
 
@@ -62,6 +63,12 @@ body {
     background-color: $color-background;
     scroll-behavior: smooth;
     overflow-x: hidden;
+}
+
+.flash-message {
+    position: absolute;
+    right: 1%;
+    bottom: 1%;
 }
 
 .nav {
