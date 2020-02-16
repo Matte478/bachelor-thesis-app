@@ -3,12 +3,8 @@
         <div class="container">
             <div class="row align-items-center justify-content-center">
                 <div class="col-sm-5">
-                    <form class="form" action="#" @submit.prevent="login">
-                        <div class="form__header">
-                            <h1 class="form__header_title">Prihlásenie</h1>
-                            <p class="form__header_subtitle">Prihlásenie do účtu</p>
-                        </div>
-                        <div class="form__body">
+                    <obd-card card-title="Prihlásenie" card-subtitle="Prihlásenie do účtu">
+                        <form class="form" action="#" @submit.prevent="login">
                             <div class="form-group">
                                 <label for="email">E-Mail</label>
                                 <div class="input-group">
@@ -24,10 +20,11 @@
                             </div>
 
                             <div class="form-group">
-                                <button type="submit" class="btn">Prihlásenie</button>
+                                <obd-button type="submit">Prihlásenie</obd-button>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </obd-card>
+
                 </div>
             </div>
         </div>
@@ -62,101 +59,48 @@ export default {
     min-height: calc(100vh - 62px);
 }
 
-.form {
-    position: relative;
-    background-color: $color-white;
-    box-shadow: $box-shadow;
-    border-radius: 5px;
+.form-group {
+    margin-bottom: 1.7em;
 
-    &__header {
-        padding: 30px;
-        border-bottom: 1px solid $color-border-light;
+    label,
+    .desc {
+        text-transform: uppercase;
+        font-weight: bold;
+    }
 
-        &_title {
-            text-transform: uppercase;
-            color: $color-primary-1;
-            @include font-size(25);
-            font-weight: bold;
-            margin-bottom: 0.4em;
-        }
-        &_subtitle {
-            text-transform: uppercase;
-            font-weight: bold;
-            color: $color-text;
-            @include font-size(14);
-            letter-spacing: 0;
-            margin-bottom: 0;  
+    .desc {
+        position: relative;
+        display: inline-block;
+        @include font-size(16);
+
+        &:after {
+            @include pseudo();
+            bottom: 0;
+            height: 1px;
+            width: 50%;
+            background-color: $color-primary-1;
         }
     }
 
-    &__body {
-        padding: 30px
-    }
+    .input-group {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+        width: 100%;
 
-    .form-group {
-        margin-bottom: 1.7em;
-
-        label,
-        .desc {
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        .desc {
-            position: relative;
-            display: inline-block;
-            @include font-size(16);
-
-            &:after {
-                @include pseudo();
-                bottom: 0;
-                height: 1px;
-                width: 50%;
-                background-color: $color-primary-1;
-            }
-        }
-
-        .input-group {
-            position: relative;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: stretch;
+        .input {
             width: 100%;
+            border: 1px solid $color-border;
+            border-radius: 4px;
+            padding: 1rem 0.75rem;
+            height: 35px;
 
-            .input {
-                width: 100%;
-                border: 1px solid $color-border;
-                border-radius: 4px;
-                padding: 1rem 0.75rem;
-                height: 35px;
-
-                &:focus {
-                    border: 1px solid $color-primary-1;
-                    outline: none;
-                }
+            &:focus {
+                border: 1px solid $color-primary-1;
+                outline: none;
             }
         }
-    }
-}
-
-.btn {
-    display: block;
-    width: 100%;
-    font-weight: 400;
-    color: $color-white;
-    text-align: center;
-    vertical-align: middle;
-    user-select: none;
-    border: 1px solid transparent;
-    padding: 0.375em 0.75em;
-    @include font-size(14, 21);
-    border-radius: 4px;
-    background-color: $color-primary-3;
-    transition: background-color 0.1s ease-in-out;
-    cursor: pointer;
-
-    &:hover {
-        background-color: darken($color-primary-3, 5%);
     }
 }
 </style>

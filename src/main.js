@@ -15,8 +15,8 @@ Vue.config.productionTip = false
 
 // Tell Vue to ignore all components defined in the test-components
 // package. The regex assumes all components names are prefixed
-// 'test'
-Vue.config.ignoredElements = [/my-component/];
+// 'obd'
+Vue.config.ignoredElements = [/obd-\w*/];
 
 // Bind the custom elements to the window object
 applyPolyfills().then(() => {

@@ -3,12 +3,8 @@
         <div class="container">
             <div class="row align-items-center justify-content-center">
                 <div class="col-sm-10">
-                    <form class="form" action="#" @submit.prevent="registerContractor">
-                        <div class="form__header">
-                            <h2 class="form__header_title">Registrácia reštaurácie</h2>
-                            <p class="form__header_subtitle">Registrujte vašu reštauráciu</p>
-                        </div>
-                        <div class="form__body">
+                    <obd-card card-title="Registrácia reštaurácie" card-subtitle="Registrujte vašu reštauráciu">
+                        <form class="form" action="#" @submit.prevent="registerContractor">
                             <div class="row justify-content-around">
                                 <div class="col-sm-6">
                                     <div class="form-group">
@@ -64,10 +60,10 @@
                             </div>
 
                             <div class="form-group">
-                                <button type="submit" class="btn">Registrácia</button>
+                                <obd-button type="submit">Registrácia</obd-button>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </obd-card>
                 </div>
             </div>
         </div>

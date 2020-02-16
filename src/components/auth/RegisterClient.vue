@@ -45,7 +45,7 @@
                             
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <p class="desc">Informácie o Vašej reštaurácii</p>
+                                        <p class="desc">Informácie o Vašej spoločnosti</p>
                                     </div>
                                     <div class="form-group">
                                         <label for="name">Názov spoločnosti</label>
