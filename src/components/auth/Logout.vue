@@ -7,7 +7,7 @@ export default {
     created() {
         this.$store.dispatch('destroyToken')
         .then(() => {
-            this.$router.push({ name: 'home' });
+            this.$router.push({ name: 'login' });
             this.flashSuccess('Boli ste úspešne odhlásený.', {
                 timeout: 3000,
             });

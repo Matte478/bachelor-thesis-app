@@ -47,7 +47,7 @@ export default {
                password: this.password,
            })
            .then(() => {
-               this.$router.push({ name: 'home' });
+               this.$router.push({ name: 'admin' });
                this.flashSuccess('Boli ste úspešne prihlásený.', {
                     timeout: 3000,
                 });

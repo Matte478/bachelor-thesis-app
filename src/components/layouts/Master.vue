@@ -41,6 +41,8 @@ export default {
 
 <style lang="scss">
 
+@import '@/assets/fonts/icofont.scss';
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -65,6 +67,10 @@ body {
     overflow-x: hidden;
 }
 
+#app {
+    padding-top: 62px;
+}
+
 .flash-message {
     position: absolute;
     right: 1%;
@@ -72,8 +78,13 @@ body {
 }
 
 .nav {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
     padding: 20px 0;
-    background: #2d4059;
+    z-index: 100;
+    background: $color-primary-1;
 
     &__inner {
         display: flex;
