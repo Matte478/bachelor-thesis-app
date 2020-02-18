@@ -1,5 +1,32 @@
 <template>
     <div class="section section--admin">
+        <obd-modal active class="pop-up" :class="{active: newMealPopup}" card-title="Pridať jedlo" card-subtitle="Pridajte nové jedlo do ponuky">
+            <form class="form" action="#" @submit.prevent="addMeal">
+                <div class="form-group">
+                    <label for="meal">Názov jedla</label>
+                    <div class="input-group">
+                        <input type="text" name="meal" id="meal" class="input" v-model="newMealName">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Cena v €</label>
+                    <div class="input-group">
+                        <input type="number" step="0.01" name="price" id="price" class="input" v-model="newMealPrice">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <obd-button type="submit">Pridať jedlo</obd-button>
+                </div>
+            </form>
+        </obd-modal>
+
+        <div class="row">
+            <div class="col-12">
+                <obd-button @click="openPopup">Pridať jedlo</obd-button>
+            </div>
+        </div>
         <div class="row">
             <div class="col-12">
                 <obd-card card-title="Menu">
@@ -34,11 +61,13 @@ export default {
     data() {
         return {
             meals: [],
+            newMealPopup: false,
+            newMealName: '',
+            newMealPrice: '',
         }
     },
     mounted () {
         axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
-        console.log(this.$store.state.tokenType + ' ' + this.$store.state.token);
 
         axios.get('/meals')
         .then(response => {
@@ -49,12 +78,67 @@ export default {
             console.log(error)
             // reject(error);
         })
+    },
+    methods: {
+        openPopup() {
+            console.log('open popup');
+            this.newMealPopup = !this.newMealPopup;
+            document.body.classList.toggle('overlay');
+        },
+
+        addMeal() {
+           axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
+
+        axios.post('/meals', {
+            meal: this.newMealName,
+            price: this.newMealPrice,
+        })
+        .then(() => {
+            this.meals.push({
+                meal: this.newMealName,
+                price: this.newMealPrice
+            });
+            this.openPopup();
+            this.flashSuccess('Jedlo bolo úspešne pridané.', {
+                timeout: 3000,
+            });
+            // resolve(response);
+        })
+        .catch(error => {
+            console.log(error)
+            this.flashError('Niečo sa pokazilo, skúste to znova.', {
+                timeout: 3000,
+            });
+        }) 
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
+
+.pop-up {
+    position: absolute;
+    display: block;
+    z-index: 150;
+    width: 90%;
+    max-width: 500px;
+    left: 50%;
+    top: calc(50vh - 62px);
+    transform: translate(-50%, -50%);
+
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease-in-out;
+
+    &.active {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
 .section--admin {
+    position: relative;
     padding: 20px 0;
 }
 table {

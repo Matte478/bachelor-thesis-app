@@ -65,6 +65,17 @@ body {
     background-color: $color-background;
     scroll-behavior: smooth;
     overflow-x: hidden;
+
+    &.overlay {
+        &:after {
+            @include pseudo('', block, fixed);
+            height: 100vh;
+            width: 100vw;
+            top: 0;
+            left: 0;
+            background-color: rgba($color: $color-primary-1, $alpha: 0.5);
+        }
+    }
 }
 
 #app {
