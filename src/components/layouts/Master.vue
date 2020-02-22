@@ -4,8 +4,8 @@
             <div class="nav__inner">
                 <router-link to="/" class="logo">Obedovač</router-link>
                 <ul>
-                    <li><router-link :to="{ name: 'home' }">Domov</router-link></li>
-                    <li v-if="!loggedIn"><router-link :to="{ name: 'login' }">Prihlásenie</router-link></li>
+                    <li><router-link :to="{ name: 'home' }" exact>Domov</router-link></li>
+                    <li v-if="!loggedIn"><router-link :to="{ name: 'login' }">Prihlásenie <i class="fas fa-sign-in-alt"></i></router-link></li>
                     <li v-if="!loggedIn" class="has-dropdown">
                         <span>
                             Registrácia
@@ -20,7 +20,7 @@
                         </span>
                     </li>
                     <li v-if="loggedIn"><router-link :to="{ name: 'admin' }">Administrácia</router-link></li>
-                    <li v-if="loggedIn"><router-link :to="{ name: 'logout' }">Odhlásiť</router-link></li>
+                    <li v-if="loggedIn"><router-link :to="{ name: 'logout' }">Odhlásiť <i class="fas fa-sign-out-alt"></i></router-link></li>
                 </ul>
             </div>
         </nav>
@@ -41,7 +41,7 @@ export default {
 
 <style lang="scss">
 
-@import '@/assets/fonts/icofont.scss';
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
 
 * {
     box-sizing: border-box;
@@ -69,8 +69,8 @@ body {
     &.overlay {
         &:after {
             @include pseudo('', block, fixed);
-            height: 100vh;
             width: 100vw;
+            height: 100vh;
             top: 0;
             left: 0;
             background-color: rgba($color: $color-primary-1, $alpha: 0.5);
@@ -79,7 +79,7 @@ body {
 }
 
 #app {
-    padding-top: 62px;
+    padding-top: 68px;
 }
 
 .flash-message {
@@ -93,9 +93,9 @@ body {
     width: 100%;
     top: 0;
     left: 0;
-    padding: 20px 0;
     z-index: 100;
     background: $color-primary-1;
+    box-shadow: 0px 3px 19px -2px rgba($color-primary-1, 0.8);
 
     &__inner {
         display: flex;
@@ -124,13 +124,32 @@ body {
         span,
         a {
             position: relative;
-            color: #fff;
-            padding: 0 25px 0 5px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            color: $color-white;
+            margin: 0 15px 0 0;
+            padding: 23px 10px;
             font-size: 14px;
             font-weight: 600;
             letter-spacing: .1rem;
             text-decoration: none;
             text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+
+            &.router-link-active,
+            &.router-link-exact-active,
+            &:hover { 
+                background-color: $color-primary-3;
+                color: $color-white;
+            }
+
+            .fas {
+                margin-left: 0.3em;
+                @include font-size(20, 20);
+            }
         }
     }
 
@@ -138,20 +157,20 @@ body {
         .dropdown {
             position: absolute;
             display: inline-block;
-            padding-top: 23px;
+            padding-top: 0;
             top: 100%;
-            right: 25px;
-            width: 175px;
+            right: 0;
+            width: 187px;
             z-index: 50;
-
+            
             opacity: 0;
             visibility: hidden;
             top: calc(100% - 10px);
+            -webkit-transition: all 0.2s ease-in-out;
             transition: all 0.2s ease-in-out;
 
             &__content {
                 position: relative;
-                padding: 15px;
                 background-color: $color-white;
                 box-shadow: $box-shadow;
             
@@ -174,8 +193,18 @@ body {
                 flex-direction: column;
                 
                 a {
-                    padding: 0 5px;
+                    display: inline-block;
+                    padding: 10px 15px;
+                    width: 100%;
                     color: $color-primary-1;
+                    transition: all 0.15s ease-in-out;
+
+                    &.router-link-active,
+                    &.router-link-exact-active,
+                    &:hover { 
+                        background-color: $color-primary-3;
+                        color: $color-white;
+                    }
                 }
             }
         }
@@ -197,6 +226,10 @@ body {
         margin-bottom: 1em;
         @include font-size(30);
         text-align: center;
+    }
+
+    &--full {
+        min-height: calc(100vh - 68px);
     }
 }
 

@@ -3,20 +3,20 @@
     <div class="sidebar-wrapper fixed-top" :class="{closed: isClosed}">
         <nav class="sidebar">
             <button class="sidebar__toggle" @click="toggleClose">
-                <i class="icofont-rounded-double-left"></i>
+                <i class="fas fa-angle-double-left"></i>
             </button>
             <ul class="sidebar__menu">
                 <li>
-                    <a href="#"><i class="icofont-dashboard"></i> Dashboard</a>
+                    <router-link :to="{ name: 'restaurant-dashboard' }"><i class="fas fa-tachometer-alt"></i> Dashboard</router-link>
                 </li>
                 <li>
-                    <router-link :to="{ name: 'restaurant-menu' }"><i class="icofont-restaurant-menu"></i> Naše menu</router-link>
+                    <router-link :to="{ name: 'restaurant-menu' }"><i class="fas fa-utensils"></i> Naše menu</router-link>
                 </li>
                 <li>
-                    <a href="#"><i class="icofont-book"></i> Týždenná ponuka</a>
+                    <a href="#"><i class="fas fa-calendar-week"></i> Týždenná ponuka</a>
                 </li>
                 <li>
-                    <a href="#"><i class="icofont-users-alt-5"></i> Zamestnanci</a>
+                    <a href="#"><i class="fas fa-users"></i> Zamestnanci</a>
                 </li>
             </ul>
         </nav>
@@ -47,7 +47,7 @@ export default {
 .admin-wrapper {
     display: flex;
     flex-direction: row;
-    padding-left: 250px;
+    padding-left: 220px;
     transition: all 0.2s ease-in-out;
 
     &.closed {
@@ -59,30 +59,28 @@ export default {
     position: relative;
     flex-grow: 0;
     flex-shrink: 0;
-    flex-basis: 250px;
+    flex-basis: 220px;
     transition: all 0.2s ease-in-out;
 
     position: fixed;
-    z-index: 100;
-    width: 250px;
+    z-index: 90;
+    width: 220px;
     left: 0;
 
      &.closed {
          flex-basis: 50px;
          width: 50px;
+
         .sidebar__toggle {
             transform: translateX(50%) rotate(180deg);
         }
-        // @at-root .admin-wrapper {
-        //     padding-left: 50px;
-        // }
     }
 
     .sidebar {
         padding: 3vh 0;
         left: 0;
         bottom: 0;
-        height: calc(100vh - 62px);
+        height: calc(100vh - 68px);
         z-index: 5;
         color: $color-white;
         overflow: scroll;
@@ -92,11 +90,13 @@ export default {
             position: absolute;
             display: inline-block;
             padding: 5px;
+            width: 50px;
+            height: 50px;
             right: 0;
             bottom: 5%;
             background-color: $color-primary-3;
             border-radius: 50%;
-            @include font-size(40);
+            @include font-size(35, 35);
             transform: translateX(50%);
             z-index: 100;
             border: none;
@@ -105,7 +105,7 @@ export default {
             cursor: pointer;
             transition: all 0.2s ease-in-out;
             
-            i {
+            .fas {
                 display: block;
             }
         }
@@ -117,26 +117,31 @@ export default {
             margin: 0;
             
             li {
-                padding: 0.7em 1em;
                 @include font-size(14, 25);
-                background-repeat: no-repeat;
-                transition: all 0.15s linear;
                 cursor: pointer;
-                
-                i {
-                    margin-right: 10px;
-                    @include font-size(25, 25);
-                }
 
                 a {
                     display: flex;
+                    padding: 0.7em 1em;
                     align-items: center;
                     color: $color-white;
                     text-decoration: none;
-                }
-                
-                &:hover {
-                    background-color: $color-primary-3;
+                    transition: all 0.15s linear;
+                    white-space: nowrap;
+                    
+                    &.router-link-active,
+                    &.router-link-exact-active,
+                    &:hover { 
+                        background-color: $color-primary-3;
+                    }
+
+                    .fas {
+                        flex: 0 0 23px;
+                        margin-right: 15px;
+                        width: 35px;
+                        @include font-size(20, 20);
+                        text-align: center;
+                    }
                 }
                 
                 &:focus {
