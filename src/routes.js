@@ -1,17 +1,17 @@
 // general
-import Home from './components/pages/Home';
-import Login from './components/auth/Login';
-import RegisterContractor from './components/auth/RegisterContractor';
-import RegisterClient from './components/auth/RegisterClient';
-import Logout from './components/auth/Logout';
-import PageNotFound from './components/pages/404';
+import Home from './views/Home';
+import Login from './views/auth/Login';
+import RegisterContractor from './views/auth/RegisterContractor';
+import RegisterClient from './views/auth/RegisterClient';
+import Logout from './views/auth/Logout';
+import PageNotFound from './views/404';
 
 
-import Admin from './components/layouts/Admin';
+import Admin from './views/layouts/Admin';
 
 // restaurant
-import RestaurantMenu from './components/pages/admin/restaurant/Menu';
-import RestaurantDashboard from './components/pages/admin/restaurant/Dashboard';
+import RestaurantMenu from './views/admin/restaurant/Menu';
+import RestaurantDashboard from './views/admin/restaurant/Dashboard';
 
 const routes = [
     {

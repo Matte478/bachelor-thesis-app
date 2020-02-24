@@ -2,9 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from './routes'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-// import App from './App.vue'
-import Master from './components/layouts/Master'
-// import Home from './components/pages/Home'
+
+import Master from './views/layouts/Master'
 import {store} from './store/store'
 import VueFlashMessage from 'vue-flash-message'
 

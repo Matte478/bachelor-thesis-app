@@ -5,19 +5,41 @@
                 <div class="form-group">
                     <label for="meal">Názov jedla</label>
                     <div class="input-group">
-                        <input type="text" name="meal" id="meal" class="input" v-model="newMealName">
+                        <input type="text" name="meal" id="meal" class="input" v-model="newMeal.meal">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="price">Cena v €</label>
                     <div class="input-group">
-                        <input type="number" step="0.01" name="price" id="price" class="input" v-model="newMealPrice">
+                        <input type="number" step="0.01" name="price" id="price" class="input" v-model="newMeal.price">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <obd-button type="submit">Pridať jedlo</obd-button>
+                </div>
+            </form>
+        </obd-modal>
+
+        <obd-modal :active="editMealPopup" @closed="closeEditPopup" class="pop-up" card-title="Upraviť jedlo" card-subtitle="Upravte jedlo z ponuky.">
+            <form class="form" action="#" @submit.prevent="editMeal(editableMeal.id)">
+                <div class="form-group">
+                    <label for="meal">Názov jedla</label>
+                    <div class="input-group">
+                        <input type="text" name="meal" id="meal" class="input" v-model="editableMeal.meal">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Cena v €</label>
+                    <div class="input-group">
+                        <input type="number" step="0.01" name="price" id="price" class="input" v-model="editableMeal.price">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <obd-button type="submit">Upraviť jedlo</obd-button>
                 </div>
             </form>
         </obd-modal>
@@ -46,7 +68,7 @@
                                     <td>{{meal.meal}}</td>
                                     <td>{{meal.price}} €</td>
                                     <td class="action">
-                                        <button href="#" class="action__edit" title="Upraviť">
+                                        <button href="#" class="action__edit" title="Upraviť" @click="openEditPopup(meal.id)">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button class="action__delete" title="Vymazať" @click="deleteMeal(meal.id)">
@@ -70,9 +92,19 @@ export default {
     data() {
         return {
             meals: [],
+            
             newMealPopup: false,
-            newMealName: '',
-            newMealPrice: '',
+            newMeal: {
+                meal: '',
+                price: '', 
+            },
+
+            editMealPopup: false,
+            editableMeal: {
+                id: '',
+                meal: '',
+                price: '',
+            }
         }
     },
     mounted() {
@@ -86,6 +118,36 @@ export default {
 
         closePopup() {
             this.newMealPopup = false;
+        },
+
+        toggleEditPopup() {
+            this.editMealPopup = !this.editMealPopup;
+            document.body.classList.toggle('overlay');
+        },
+
+        openEditPopup(mealId) {
+            axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
+
+            axios.get('/meals/' + mealId)
+            .then(response => {
+                let loadedMeal = response.data.data;
+                
+                this.editableMeal.id = loadedMeal.id;
+                this.editableMeal.meal = loadedMeal.meal;
+                this.editableMeal.price = loadedMeal.price;
+                
+                document.body.classList.add('overlay');
+                this.editMealPopup = true;
+            })
+            .catch(error => {
+                console.log(error);
+                this.flashError('Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.');
+            })
+        },
+
+        closeEditPopup() {
+            this.editMealPopup = false;
+            document.body.classList.remove('overlay');
         },
 
         loadMeals() {
@@ -105,14 +167,10 @@ export default {
            axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
 
             axios.post('/meals', {
-                meal: this.newMealName,
-                price: this.newMealPrice,
+                meal: this.newMeal.meal,
+                price: this.newMeal.price,
             })
             .then(() => {
-                // this.meals.push({
-                //     meal: this.newMealName,
-                //     price: this.newMealPrice
-                // });
                 this.loadMeals();
                 this.togglePopup();
                 this.flashSuccess('Jedlo bolo úspešne pridané.', {
@@ -127,24 +185,48 @@ export default {
             })
         },
 
-        deleteMeal(mealId) {
+        editMeal(mealId) {
             axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
 
-            axios.delete('/meals/' + mealId)
+            axios.post('/meals/' + mealId, this.editableMeal)
             .then(() => {
-                let meals = this.meals.filter(meal => meal.id != mealId);
-                this.meals = meals;
+                this.loadMeals();
 
-                this.flashSuccess('Jedlo bolo úspešne zmazané.', {
+                this.flashSuccess('Jedlo bolo úspešne upravené.', {
                     timeout: 3000,
                 });
             })
             .catch(error => {
                 console.log(error);
-                this.flashError('Niečo sa pokazilo, skúste to znova.', {
+                this.flashError('Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.', {
                     timeout: 3000,
                 });
             })
+
+            this.closeEditPopup();
+        },
+
+        deleteMeal(mealId) {
+            let response = confirm(`Naozaj chcete vymazať dané jedlo?`);
+            if(response) {
+                axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
+
+                axios.delete('/meals/' + mealId)
+                .then(() => {
+                    let meals = this.meals.filter(meal => meal.id != mealId);
+                    this.meals = meals;
+
+                    this.flashSuccess('Jedlo bolo úspešne zmazané.', {
+                        timeout: 3000,
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.flashError('Niečo sa pokazilo, skúste to znova.', {
+                        timeout: 3000,
+                    });
+                })
+            }
         }
     }
 }
@@ -153,7 +235,7 @@ export default {
 <style lang="scss" scoped>
 
 .pop-up {
-    position: absolute;
+    position: fixed;
     display: block;
     z-index: 150;
     width: 90%;
