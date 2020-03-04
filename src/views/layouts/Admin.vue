@@ -5,7 +5,7 @@
             <button class="sidebar__toggle" @click="toggleClose">
                 <i class="fas fa-angle-double-left"></i>
             </button>
-            <ul class="sidebar__menu">
+            <ul class="sidebar__menu" v-if="userType == 'contractor'">
                 <li>
                     <router-link :to="{ name: 'restaurant-dashboard' }"><i class="fas fa-tachometer-alt"></i> Dashboard</router-link>
                 </li>
@@ -13,7 +13,16 @@
                     <router-link :to="{ name: 'restaurant-menu' }"><i class="fas fa-utensils"></i> Naše menu</router-link>
                 </li>
                 <li>
-                    <a href="#"><i class="fas fa-calendar-week"></i> Týždenná ponuka</a>
+                    <router-link :to="{ name: 'restaurant-week-offer' }"><i class="fas fa-calendar-week"></i> Týždenná ponuka</router-link>
+                </li>
+                <li>
+                    <a href="#"><i class="fas fa-users"></i> Zamestnanci</a>
+                </li>
+            </ul>
+
+            <ul class="sidebar__menu" v-if="userType == 'client'">
+                <li>
+                    <router-link :to="{ name: 'client-contractor' }"><i class="fas fa-tachometer-alt"></i> Dodávateľ</router-link>
                 </li>
                 <li>
                     <a href="#"><i class="fas fa-users"></i> Zamestnanci</a>
@@ -34,7 +43,11 @@ export default {
              isClosed: false
         }
     },
-
+    computed: {
+        userType() {
+            return this.$store.getters.userType;
+        }
+    },
     methods: {
         toggleClose: function() {
             this.isClosed = !this.isClosed;
@@ -44,6 +57,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.section--admin {
+    position: relative;
+    padding: 20px 0;
+}
+
 .admin-wrapper {
     display: flex;
     flex-direction: row;

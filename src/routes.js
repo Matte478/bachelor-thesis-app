@@ -10,8 +10,12 @@ import PageNotFound from './views/404';
 import Admin from './views/layouts/Admin';
 
 // restaurant
-import RestaurantMenu from './views/admin/restaurant/Menu';
 import RestaurantDashboard from './views/admin/restaurant/Dashboard';
+import RestaurantMenu from './views/admin/restaurant/Menu';
+import RestaurantWeekOffer from './views/admin/restaurant/WeekOffer';
+
+// client
+import ClientContractor from './views/admin/client/Contractor';
 
 const routes = [
     {
@@ -59,14 +63,25 @@ const routes = [
 
         children: [
             {
+                path: 'dashboard',
+                name: 'restaurant-dashboard',
+                component: RestaurantDashboard,
+            },
+            {
                 path: 'menu',
                 name: 'restaurant-menu',
                 component: RestaurantMenu,
             },
             {
-                path: 'dashboard',
-                name: 'restaurant-dashboard',
-                component: RestaurantDashboard,
+                path: 'week-offer',
+                name: 'restaurant-week-offer',
+                component: RestaurantWeekOffer,
+            },
+
+            {
+                path: '/contractor',
+                name: 'client-contractor',
+                component: ClientContractor,
             },
           ]
     },

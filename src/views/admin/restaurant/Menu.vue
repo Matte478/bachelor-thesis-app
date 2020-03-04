@@ -1,6 +1,6 @@
 <template>
-    <div class="section section--admin">
-        <obd-modal :active="newMealPopup" @closed="closePopup" class="pop-up" card-title="Pridať jedlo" card-subtitle="Pridajte nové jedlo do ponuky">
+    <section class="section section--admin">
+        <obd-modal :active="newMealPopup" @closed="closePopup" class="pop-up" modal-title="Pridať jedlo" modal-subtitle="Pridajte nové jedlo do ponuky">
             <form class="form" action="#" @submit.prevent="addMeal">
                 <div class="form-group">
                     <label for="meal">Názov jedla</label>
@@ -17,12 +17,12 @@
                 </div>
 
                 <div class="form-group">
-                    <obd-button type="submit">Pridať jedlo</obd-button>
+                    <obd-button type="submit" block>Pridať jedlo</obd-button>
                 </div>
             </form>
         </obd-modal>
 
-        <obd-modal :active="editMealPopup" @closed="closeEditPopup" class="pop-up" card-title="Upraviť jedlo" card-subtitle="Upravte jedlo z ponuky.">
+        <obd-modal :active="editMealPopup" @closed="closeEditPopup" class="pop-up" modal-title="Upraviť jedlo" modal-subtitle="Upravte jedlo z ponuky.">
             <form class="form" action="#" @submit.prevent="editMeal(editableMeal.id)">
                 <div class="form-group">
                     <label for="meal">Názov jedla</label>
@@ -39,50 +39,46 @@
                 </div>
 
                 <div class="form-group">
-                    <obd-button type="submit">Upraviť jedlo</obd-button>
+                    <obd-button type="submit" block>Upraviť jedlo</obd-button>
                 </div>
             </form>
         </obd-modal>
 
         <div class="row">
             <div class="col-12">
-                <obd-button @click="togglePopup">Pridať jedlo</obd-button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
                 <obd-card card-title="Menu">
-                    <ul>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Názov jedla</th>
-                                    <th>Cena</th>
-                                    <th />
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="meal in meals" v-bind:key="meal.id">
-                                    <td>{{meal.id}}</td>
-                                    <td>{{meal.meal}}</td>
-                                    <td>{{meal.price}} €</td>
-                                    <td class="action">
-                                        <button href="#" class="action__edit" title="Upraviť" @click="openEditPopup(meal.id)">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action__delete" title="Vymazať" @click="deleteMeal(meal.id)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </ul>
+                    <div slot="controls">
+                        <obd-button @click="togglePopup">Pridať jedlo</obd-button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Názov jedla</th>
+                                <th>Cena</th>
+                                <th />
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="meal in meals" v-bind:key="meal.id">
+                                <td>{{meal.id}}</td>
+                                <td>{{meal.meal}}</td>
+                                <td>{{meal.price}} €</td>
+                                <td class="action">
+                                    <button class="action__edit" title="Upraviť" @click="openEditPopup(meal.id)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action__delete" title="Vymazať" @click="deleteMeal(meal.id)">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </obd-card>
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>
@@ -170,8 +166,8 @@ export default {
                 meal: this.newMeal.meal,
                 price: this.newMeal.price,
             })
-            .then(() => {
-                this.loadMeals();
+            .then(response => {
+                this.meals.push(response.data.data);
                 this.togglePopup();
                 this.flashSuccess('Jedlo bolo úspešne pridané.', {
                     timeout: 3000,
@@ -245,11 +241,6 @@ export default {
     transform: translate(-50%, -50%);
     visibility: visible;
 }
-
-.section--admin {
-    position: relative;
-    padding: 20px 0;
-}
 table {
     width: 100%;
     display: table;
@@ -273,6 +264,7 @@ table {
 
             &.action {
                 width: 100px;
+                text-align: right;
                 .action__edit,
                 .action__delete {
                     padding: 8px;

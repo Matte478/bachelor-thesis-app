@@ -9,10 +9,14 @@ export const store = new Vuex.Store({
     state: {
         token: localStorage.getItem('token') || null,
         tokenType: localStorage.getItem('token_type') || null,
+        userType: localStorage.getItem('user_type') || null,
     },
     getters: {
         loggedIn(state) {
             return state.token !== null;
+        },
+        userType(state) {
+            return state.userType;
         }
     },
     mutations: {
@@ -21,6 +25,9 @@ export const store = new Vuex.Store({
         },
         retrieveTokenType(state, tokenType) {
             state.tokenType = tokenType;
+        },
+        retrieveUserType(state, userType) {
+            state.userType = userType;
         },
         destroyToken(state) {
             state.token = null;
@@ -39,11 +46,16 @@ export const store = new Vuex.Store({
                 .then(response => {
                     const token = response.data.success.token;
                     const tokenType = response.data.success.token_type;
+                    const userType = response.data.success.user.type;
 
                     localStorage.setItem('token', token);
                     context.commit('retrieveToken', token);
+
                     localStorage.setItem('token_type', tokenType);
                     context.commit('retrieveTokenType', tokenType);
+
+                    localStorage.setItem('user_type', userType)
+                    context.commit('retrieveUserType', userType);
 
                     resolve(response);
                 })

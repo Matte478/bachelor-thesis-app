@@ -20,7 +20,7 @@
                             </div>
 
                             <div class="form-group">
-                                <obd-button type="submit">Prihlásenie</obd-button>
+                                <obd-button type="submit" block>Prihlásenie</obd-button>
                             </div>
                         </form>
                     </obd-card>

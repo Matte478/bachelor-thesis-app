@@ -60,7 +60,7 @@
                             </div>
 
                             <div class="form-group">
-                                <obd-button type="submit">Registrácia</obd-button>
+                                <obd-button type="submit" block>Registrácia</obd-button>
                             </div>
                         </form>
                     </obd-card>
