@@ -50,31 +50,13 @@
                     <div slot="controls">
                         <obd-button @click="togglePopup">Pridať jedlo</obd-button>
                     </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Názov jedla</th>
-                                <th>Cena</th>
-                                <th />
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="meal in meals" v-bind:key="meal.id">
-                                <td>{{meal.id}}</td>
-                                <td>{{meal.meal}}</td>
-                                <td>{{meal.price}} €</td>
-                                <td class="action">
-                                    <button class="action__edit" title="Upraviť" @click="openEditPopup(meal.id)">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="action__delete" title="Vymazať" @click="deleteMeal(meal.id)">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <obd-table
+                        v-if="meals"
+                        :data="mealsStr"
+                        :columns="JSON.stringify(columns)"
+                        :actions="JSON.stringify(tableActions)"
+                        @action="action"
+                    />
                 </obd-card>
             </div>
         </div>
@@ -88,6 +70,34 @@ export default {
     data() {
         return {
             meals: [],
+            tableActions: [
+                {
+                    "text": "",
+                    "action": "edit",
+                    "icon": "fas fa-edit",
+                    "color": "#2d4059"
+                },
+                {
+                    "text": "",
+                    "action": "delete",
+                    "icon": "fas fa-trash-alt",
+                    "color": "#ea5455"
+                }
+            ],
+            columns: [
+                {
+                    "key": "id",
+                    "text": "ID"
+                },
+                {
+                    "key": "meal",
+                    "text": "Názov jedla"
+                },
+                {
+                    "key": "price",
+                    "text": "Cena v €"
+                },
+            ],
             
             newMealPopup: false,
             newMeal: {
@@ -103,6 +113,11 @@ export default {
             }
         }
     },
+    computed: {
+        mealsStr() {
+            return JSON.stringify(this.meals)
+        }
+    },
     mounted() {
         this.loadMeals();
     },
@@ -110,6 +125,17 @@ export default {
         togglePopup() {
             this.newMealPopup = !this.newMealPopup;
             document.body.classList.toggle('overlay');
+        },
+
+        action(e) {
+            switch(e.detail.action) {
+                case 'edit': 
+                    this.openEditPopup(e.detail.id);
+                    break;
+                case 'delete':
+                    this.deleteMeal(e.detail.id);
+                    break;
+            }
         },
 
         closePopup() {
