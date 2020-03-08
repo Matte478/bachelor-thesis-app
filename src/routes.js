@@ -6,13 +6,12 @@ import RegisterClient from './views/auth/RegisterClient';
 import Logout from './views/auth/Logout';
 import PageNotFound from './views/404';
 
-
+// layout
 import Admin from './views/layouts/Admin';
 
 // restaurant
 import RestaurantDashboard from './views/admin/restaurant/Dashboard';
 import RestaurantMenu from './views/admin/restaurant/Menu';
-// import RestaurantWeekOffer from './views/admin/restaurant/WeekOffer';
 import RestaurantClients from './views/admin/restaurant/Client';
 
 // client
@@ -73,11 +72,6 @@ const routes = [
                 name: 'restaurant-menu',
                 component: RestaurantMenu,
             },
-            // {
-            //     path: 'week-offer',
-            //     name: 'restaurant-week-offer',
-            //     component: RestaurantWeekOffer,
-            // },
             {
                 path: 'clients',
                 name: 'restaurant-clients',
@@ -85,7 +79,7 @@ const routes = [
             },
 
             {
-                path: '/contractor',
+                path: 'contractor',
                 name: 'client-contractor',
                 component: ClientContractor,
             },
