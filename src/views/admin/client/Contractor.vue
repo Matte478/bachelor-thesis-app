@@ -2,7 +2,10 @@
     <section class="section section--admin">
         <div class="row">
             <div class="col-12">
-                <create-agreement v-if="!hasContractor" />
+                <create-agreement
+                    v-if="!hasContractor"
+                    @created-agreement="loadContractor"
+                />
                 <div v-else>
                     <obd-card card-title="Váš dodávateľ">
                         <h3 v-if="!confirmed">Dodávateľ ešte nepotvrdil vašu spoluprácu.</h3>

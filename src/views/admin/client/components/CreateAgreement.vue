@@ -21,12 +21,13 @@ export default {
                 {
                     "text": "Vybrať",
                     "action": "selectContractor",
+                    "color": "#f07b3f"
                 },
             ],
             columns: [
                 {
                     "key": "restaurant",
-                    "text": "Reštaurácia"
+                    "text": "Reštaurácia",
                 },
                 {
                     "key": "city",
@@ -43,7 +44,7 @@ export default {
     created() {
         this.loadRestaurands();
     },
-        methods: {
+    methods: {
         action(e) {
             switch(e.detail.action) {
                 case 'selectContractor':
@@ -56,18 +57,25 @@ export default {
         },
 
         createAgreement(restaurantId) {
-            axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
+            let response = confirm('Naozaj chcete vybrať daného dodávateľa?');
 
-            axios.post('/agreements', {
-                'restaurant_id': restaurantId,
-            })
-            .then(response => {
-                this.restaurants = response.data.data;
-                console.log(response);
-            })
-            .catch(error => {
-                this.flashError(error.response.data.error);
-            })
+            if(response) {
+                axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
+
+                axios.post('/agreements', {
+                    'restaurant_id': restaurantId,
+                })
+                .then(response => {
+                    this.restaurants = response.data.data;
+                    this.flashSuccess('Dodávateľ bol zvolený. Teraz musíte počkať na schválenie.', {
+                        timeout: 3000,
+                    });
+                    this.$emit('created-agreement');
+                })
+                .catch(error => {
+                    this.flashError(error.response.data.error);
+                })
+            }
         },
 
         loadRestaurands() {

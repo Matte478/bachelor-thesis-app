@@ -12,7 +12,8 @@ import Admin from './views/layouts/Admin';
 // restaurant
 import RestaurantDashboard from './views/admin/restaurant/Dashboard';
 import RestaurantMenu from './views/admin/restaurant/Menu';
-import RestaurantWeekOffer from './views/admin/restaurant/WeekOffer';
+// import RestaurantWeekOffer from './views/admin/restaurant/WeekOffer';
+import RestaurantClients from './views/admin/restaurant/Client';
 
 // client
 import ClientContractor from './views/admin/client/Contractor';
@@ -72,10 +73,15 @@ const routes = [
                 name: 'restaurant-menu',
                 component: RestaurantMenu,
             },
+            // {
+            //     path: 'week-offer',
+            //     name: 'restaurant-week-offer',
+            //     component: RestaurantWeekOffer,
+            // },
             {
-                path: 'week-offer',
-                name: 'restaurant-week-offer',
-                component: RestaurantWeekOffer,
+                path: 'clients',
+                name: 'restaurant-clients',
+                component: RestaurantClients,
             },
 
             {
