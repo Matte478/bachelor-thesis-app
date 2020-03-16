@@ -10,6 +10,8 @@ export const store = new Vuex.Store({
         token: localStorage.getItem('token') || null,
         tokenType: localStorage.getItem('token_type') || null,
         userType: localStorage.getItem('user_type') || null,
+
+        meals: [],
     },
     getters: {
         loggedIn(state) {
@@ -17,6 +19,10 @@ export const store = new Vuex.Store({
         },
         userType(state) {
             return state.userType;
+        },
+
+        getMeals(state) {
+            return state.meals;
         }
     },
     mutations: {
@@ -35,6 +41,10 @@ export const store = new Vuex.Store({
         destroyTokenType(state) {
             state.tokenType = null;
         },
+
+        fetchMeals(state, meals) {
+            state.meals = meals
+        }
     },
     actions: {
         retrieveToken(context, credentials) {
@@ -121,6 +131,22 @@ export const store = new Vuex.Store({
                     resolve(response);
                 })
                 .catch(error => {
+                    reject(error);
+                })
+            })
+        },
+
+        fetchMeals(context) {
+            axios.defaults.headers.common['Authorization'] = context.state.tokenType + ' ' + context.state.token;
+            
+            return new Promise((resolve, reject) => {
+                axios.get('/meals')
+                .then(response => {
+                    context.commit('fetchMeals', response.data.data);
+                    resolve();
+                })
+                .catch(error => {
+                    console.log(error);
                     reject(error);
                 })
             })

@@ -29,7 +29,7 @@
                                         :key="meal.id"
                                     >
                                     <label :for="weekDaysEn[indexDay].toLowerCase() + '-' + indexMeal">
-                                        {{meal.meal}}<br />
+                                        {{meal.meal}} <br />
                                         {{meal.price}}€
                                     </label>
                                 </div> 
@@ -51,32 +51,31 @@ export default {
     mixins: [timeMixin],
     data() {
         return {
-            meals: [],
             order: [
-                {'meal': null},
-                {'meal': null},
-                {'meal': null},
-                {'meal': null},
-                {'meal': null},
-                {'meal': null},
-                {'meal': null},
+                {'meal': null, 'date': null},
+                {'meal': null, 'date': null},
+                {'meal': null, 'date': null},
+                {'meal': null, 'date': null},
+                {'meal': null, 'date': null},
+                {'meal': null, 'date': null},
+                {'meal': null, 'date': null},
             ],
         }
     },
-    mounted() {
-        this.loadMeals();
+    computed: {
+        meals() {
+            return this.$store.getters.getMeals;
+        }
+    },
+    created() {
+        this.$store.dispatch('fetchMeals');
+        this.addDateToOrder();
     },
     methods: {
-        loadMeals() {
-           axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
-
-            axios.get('/meals')
-            .then(response => {
-                this.meals = response.data.data;
-            })
-            .catch(error => {
-                console.log(error);
-                this.flashError('Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.');
+        addDateToOrder() {
+            this.order.forEach((o, index) => {
+                if(o.date == null)
+                    o.date = this.getCurrentWeek[index]
             })
         },
         submitOrder(e) {
@@ -102,7 +101,6 @@ export default {
             align-items: center;
             justify-content: flex-start;
             margin-bottom: 1em;
-            width: 50%;
             label {
                 line-height: 1.3;
                 padding-left: 0.5em;
