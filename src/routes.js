@@ -16,6 +16,7 @@ import RestaurantClients from './views/admin/restaurant/Client';
 
 // client
 import ClientContractor from './views/admin/client/Contractor';
+import Orders from './views/Order';
 
 const routes = [
     {
@@ -52,6 +53,14 @@ const routes = [
         path: '/logout',
         name: 'logout',
         component: Logout,
+    },
+    {
+        path: '/orders',
+        name: 'orders',
+        component: Orders,
+        meta: {
+            requiresAuth: true,
+        },
     },
     {
         path: '/admin',

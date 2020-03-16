@@ -5,6 +5,7 @@
                 <router-link to="/" class="logo">Obedovač</router-link>
                 <ul>
                     <li><router-link :to="{ name: 'home' }" exact>Domov</router-link></li>
+                    <li v-if="loggedIn && (userType == 'client')"><router-link :to="{ name: 'orders' }" exact>Obedy</router-link></li>
                     <li v-if="!loggedIn"><router-link :to="{ name: 'login' }">Prihlásenie <i class="fas fa-sign-in-alt"></i></router-link></li>
                     <li v-if="!loggedIn" class="has-dropdown">
                         <span>
@@ -34,6 +35,9 @@ export default {
     computed: {
         loggedIn() {
             return this.$store.getters.loggedIn;
+        },
+        userType() {
+            return this.$store.getters.userType;
         }
     }
 }
