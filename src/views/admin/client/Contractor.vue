@@ -39,7 +39,7 @@ export default {
     },
     methods: {
         loadContractor() {
-            axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
+            axios.defaults.headers.common['Authorization'] = this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token;
 
             axios.get('/agreements')
             .then(response => {

@@ -69,7 +69,6 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            meals: [],
             tableActions: [
                 {
                     "text": "",
@@ -114,12 +113,18 @@ export default {
         }
     },
     computed: {
+        meals() {
+            return this.$store.getters.getMeals;
+        },
         mealsStr() {
             return JSON.stringify(this.meals)
         }
     },
     mounted() {
-        this.loadMeals();
+        this.$store.dispatch('fetchMeals')
+        .catch((e) => {
+            this.flashError('Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.');
+        });
     },
     methods: {
         togglePopup() {
@@ -148,7 +153,7 @@ export default {
         },
 
         openEditPopup(mealId) {
-            axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
+            axios.defaults.headers.common['Authorization'] = this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token;
 
             axios.get('/meals/' + mealId)
             .then(response => {
@@ -172,21 +177,8 @@ export default {
             document.body.classList.remove('overlay');
         },
 
-        loadMeals() {
-           axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
-
-            axios.get('/meals')
-            .then(response => {
-                this.meals = response.data.data;
-            })
-            .catch(error => {
-                console.log(error);
-                this.flashError('Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.');
-            })
-        },
-
         addMeal() {
-           axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
+           axios.defaults.headers.common['Authorization'] = this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token;
 
             axios.post('/meals', {
                 meal: this.newMeal.meal,
@@ -208,11 +200,14 @@ export default {
         },
 
         editMeal(mealId) {
-            axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
+            axios.defaults.headers.common['Authorization'] = this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token;
 
             axios.post('/meals/' + mealId, this.editableMeal)
             .then(() => {
-                this.loadMeals();
+                this.$store.dispatch('fetchMeals')
+                .catch((e) => {
+                    this.flashError('Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.');
+                });
 
                 this.flashSuccess('Jedlo bolo úspešne upravené.', {
                     timeout: 3000,
@@ -231,7 +226,7 @@ export default {
         deleteMeal(mealId) {
             let response = confirm('Naozaj chcete vymazať dané jedlo?');
             if(response) {
-                axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
+                axios.defaults.headers.common['Authorization'] = this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token;
 
                 axios.delete('/meals/' + mealId)
                 .then(() => {

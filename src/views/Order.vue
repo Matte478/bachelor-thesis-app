@@ -68,7 +68,11 @@ export default {
         }
     },
     created() {
-        this.$store.dispatch('fetchMeals');
+        this.$store.dispatch('fetchMeals')
+        .catch((e) => {
+            this.flashError('Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.');
+        });
+        
         this.addDateToOrder();
     },
     methods: {

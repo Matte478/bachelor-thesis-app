@@ -59,7 +59,7 @@ export default {
     },
     methods: {
         loadContractor() {
-            axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
+            axios.defaults.headers.common['Authorization'] = this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token;
 
             axios.get('/agreements')
             .then(response => {
@@ -107,7 +107,7 @@ export default {
             let response = confirm('Naozaj chcete schváliť danú žiadosť?');
 
             if(response) {
-                axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
+                axios.defaults.headers.common['Authorization'] = this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token;
 
                 axios.post('/agreements/' + id + '/confirm')
                 .then(response => {

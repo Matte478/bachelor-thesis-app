@@ -60,7 +60,7 @@ export default {
             let response = confirm('Naozaj chcete vybrať daného dodávateľa?');
 
             if(response) {
-                axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
+                axios.defaults.headers.common['Authorization'] = this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token;
 
                 axios.post('/agreements', {
                     'restaurant_id': restaurantId,
@@ -79,7 +79,7 @@ export default {
         },
 
         loadRestaurands() {
-           axios.defaults.headers.common['Authorization'] = this.$store.state.tokenType + ' ' + this.$store.state.token;
+           axios.defaults.headers.common['Authorization'] = this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token;
 
             axios.get('/restaurants')
             .then(response => {
