@@ -25,7 +25,11 @@
                 </ul>
             </div>
         </nav>
-        <router-view></router-view>
+
+        <transition name="fade" mode="out-in">
+            <router-view />
+        </transition>
+
         <flash-message class="flash-message"></flash-message>
     </div>
 </template>
@@ -235,6 +239,22 @@ body {
     &--full {
         min-height: calc(100vh - 68px);
     }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.3s;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0
+}
+
+[v-cloak] { 
+    display: none;
 }
 
 </style>

@@ -4,6 +4,7 @@
             <div class="row">
                 <div class="col-12">
                     <obd-card
+                        v-if="order.length"
                         card-title="Objednaj si obedy na tento týždeň"
                         :card-subtitle="getWeekRange('DD.MM.YYYY')"
                     >
@@ -63,15 +64,7 @@ export default {
     mixins: [timeMixin],
     data() {
         return {
-            order: [
-                // {'meal': null, 'date': null},
-                // {'meal': null, 'date': null},
-                // {'meal': null, 'date': null},
-                // {'meal': null, 'date': null},
-                // {'meal': null, 'date': null},
-                // {'meal': null, 'date': null},
-                // {'meal': null, 'date': null},
-            ],
+            order: [],
         }
     },
     computed: {
@@ -113,7 +106,7 @@ export default {
                     if(!exists) {
                         this.order.splice(index, 0, {
                             'date': day,
-                            'meal_id': null
+                            'meal_id': 10
                         });
                     }
                 })  
@@ -124,7 +117,7 @@ export default {
         },
         submitOrder(e) {
             axios.defaults.headers.common['Authorization'] = this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token;
-
+            
             axios.post('/orders', {
                 orders: this.order
             })
