@@ -7,26 +7,38 @@
                         card-title="Objednaj si obedy na tento týždeň"
                         :card-subtitle="getWeekRange('DD.MM.YYYY')"
                     >
+                        <div slot="controls">
+                            <obd-scroll
+                                v-for="(day, index) in weekDays"
+                                :key="index"
+                                :scroll-to="weekDaysEn[index].toLowerCase()"
+                                v-html="day"
+                            />
+                        </div>
                         <form action="#" @submit.prevent="submitOrder">
-                            <div 
+                            <div
                                 v-for="(date, indexDay) in getCurrentWeek"
                                 :key="indexDay"
-                                class="order" 
+                                class="order"
                             >
-                                <h3 class="order__title">{{weekDays[indexDay]}} ({{date}})</h3>
+                                <h3 class="order__title" :id="weekDaysEn[indexDay].toLowerCase()">
+                                    {{weekDays[indexDay]}} | {{formatDate(date)}}
+                                </h3>
                                 <hr class="order__divider">
                                 <div
                                     v-for="(meal, indexMeal) in meals"
                                     :key="indexMeal"
                                     class="order__item"
+                                    :style="{opacity: (isPassedDate(date) ? 0.6 : 1)}"
                                 >
                                     <input
                                         type="radio" 
                                         :name="weekDaysEn[indexDay].toLowerCase() + '-meal'"
                                         :id="weekDaysEn[indexDay].toLowerCase() + '-' + indexMeal" 
                                         :value="meal.id"
-                                        v-model="order[indexDay].meal"
+                                        v-model="order[indexDay].meal_id"
                                         :key="meal.id"
+                                        :disabled="isPassedDate(date)"
                                     >
                                     <label :for="weekDaysEn[indexDay].toLowerCase() + '-' + indexMeal">
                                         {{meal.meal}} <br />
@@ -34,7 +46,7 @@
                                     </label>
                                 </div> 
                             </div>
-                            <obd-button block>Uložiť</obd-button>
+                            <obd-button block id="submitBtn">Uložiť</obd-button>
                         </form>
                     </obd-card>
                 </div>
@@ -52,13 +64,13 @@ export default {
     data() {
         return {
             order: [
-                {'meal': null, 'date': null},
-                {'meal': null, 'date': null},
-                {'meal': null, 'date': null},
-                {'meal': null, 'date': null},
-                {'meal': null, 'date': null},
-                {'meal': null, 'date': null},
-                {'meal': null, 'date': null},
+                // {'meal': null, 'date': null},
+                // {'meal': null, 'date': null},
+                // {'meal': null, 'date': null},
+                // {'meal': null, 'date': null},
+                // {'meal': null, 'date': null},
+                // {'meal': null, 'date': null},
+                // {'meal': null, 'date': null},
             ],
         }
     },
@@ -72,8 +84,10 @@ export default {
         .catch((e) => {
             this.flashError('Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.');
         });
-        
+
         this.addDateToOrder();
+
+        this.loadOrder();
     },
     methods: {
         addDateToOrder() {
@@ -82,14 +96,57 @@ export default {
                     o.date = this.getCurrentWeek[index]
             })
         },
+        loadOrder() {
+           axios.defaults.headers.common['Authorization'] = this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token;
+
+            axios.get('/orders?filter[date_from]=' + this.getWeekStart() + '&filter[date_to]=' + this.getWeekEnd())
+            .then(response => {
+                this.order = response.data.data;
+
+                this.getCurrentWeek.forEach((day, index) => {
+                    let exists = false;
+                    this.order.forEach((o) => {
+                        if (o.date == day) {
+                            exists = true;
+                        }
+                    })
+                    if(!exists) {
+                        this.order.splice(index, 0, {
+                            'date': day,
+                            'meal_id': null
+                        });
+                    }
+                })  
+            })
+            .catch(error => {
+                console.log(error);
+            }) 
+        },
         submitOrder(e) {
-            //TODO
+            axios.defaults.headers.common['Authorization'] = this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token;
+
+            axios.post('/orders', {
+                orders: this.order
+            })
+            .then(response => {
+                this.flashSuccess('Obedy boli uložené.', {
+                    timeout: 3000,
+                });
+            })
+            .catch(error => {
+                console.log(error);
+            })
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
+    obd-scroll {
+        margin-left: 0.3em;
+        margin-bottom: 0.3em;
+    }
+
     .order {
         margin-bottom: 2em;
         @include font-size(15);

@@ -87,7 +87,7 @@ body {
 }
 
 .flash-message {
-    position: absolute;
+    position: fixed;
     right: 1%;
     bottom: 1%;
 }

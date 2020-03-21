@@ -64,8 +64,6 @@ export default {
             })
         },
         destroyToken(context) {
-            // context.state.auth.state.tokenType
-            // axios.defaults.headers.common['Authorization'] =  context.state.auth.state.tokenType + ' ' + context.state.token;
             axios.defaults.headers.common['Authorization'] = context.state.tokenType + ' ' + context.state.token;
             
             if(context.getters.loggedIn) {
