@@ -12,7 +12,7 @@
                             <obd-scroll
                                 v-for="(day, index) in weekDays"
                                 :key="index"
-                                :scroll-to="weekDaysEn[index].toLowerCase()"
+                                :target="weekDaysEn[index].toLowerCase()"
                                 v-html="day"
                             />
                         </div>
@@ -41,7 +41,9 @@
                                         :key="meal.id"
                                         :disabled="isPassedDate(date)"
                                     >
-                                    <label :for="weekDaysEn[indexDay].toLowerCase() + '-' + indexMeal">
+                                    <label
+                                        :for="weekDaysEn[indexDay].toLowerCase() + '-' + indexMeal"
+                                    >
                                         {{meal.meal}} <br />
                                         {{meal.price}}€
                                     </label>
@@ -62,73 +64,58 @@ import axios from 'axios';
 
 export default {
     mixins: [timeMixin],
-    data() {
-        return {
-            order: [],
-        }
-    },
+    // data() {
+    //     return {
+    //         localOrder: [],
+    //     }
+    // },
     computed: {
         meals() {
             return this.$store.getters.getMeals;
+        },
+        order: {
+            set(order) {
+                this.$store.commit('orders/fetchOrders', {order});
+            },
+            get() {
+                return this.$store.getters['orders/getOrders'];
+            }
         }
     },
+
     created() {
         this.$store.dispatch('fetchMeals')
         .catch((e) => {
             this.flashError('Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.');
         });
 
-        this.addDateToOrder();
+        // this.addDateToOrder();
 
-        this.loadOrder();
+        let filter = '?filter[date_from]=' + this.getWeekStart() + '&filter[date_to]=' + this.getWeekEnd();
+        this.$store.dispatch('orders/fetchOrders', filter)
+        .catch((e) => {
+            this.flashError('Niečo sa pokazilo, nebolo možné načítať objedná.<br>Skúste obnoviť stránku.');
+        });
     },
     methods: {
-        addDateToOrder() {
-            this.order.forEach((o, index) => {
-                if(o.date == null)
-                    o.date = this.getCurrentWeek[index]
-            })
-        },
-        loadOrder() {
-           axios.defaults.headers.common['Authorization'] = this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token;
-
-            axios.get('/orders?filter[date_from]=' + this.getWeekStart() + '&filter[date_to]=' + this.getWeekEnd())
-            .then(response => {
-                this.order = response.data.data;
-
-                this.getCurrentWeek.forEach((day, index) => {
-                    let exists = false;
-                    this.order.forEach((o) => {
-                        if (o.date == day) {
-                            exists = true;
-                        }
-                    })
-                    if(!exists) {
-                        this.order.splice(index, 0, {
-                            'date': day,
-                            'meal_id': 10
-                        });
-                    }
-                })  
-            })
-            .catch(error => {
-                console.log(error);
-            }) 
-        },
+        // addDateToOrder() {
+        //     this.order.forEach((o, index) => {
+        //         if(o.date == null)
+        //             o.date = this.getCurrentWeek[index]
+        //     })
+        // },
+        
         submitOrder(e) {
-            axios.defaults.headers.common['Authorization'] = this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token;
-            
-            axios.post('/orders', {
-                orders: this.order
-            })
+            this.$store.dispatch('orders/submitOrder')
             .then(response => {
                 this.flashSuccess('Obedy boli uložené.', {
                     timeout: 3000,
                 });
             })
-            .catch(error => {
-                console.log(error);
-            })
+            .catch((e) => {
+                console.log(e);
+                this.flashError('Niečo sa pokazilo, nebolo možné načítať objedná.<br>Skúste obnoviť stránku.');
+            });
         }
     }
 }

@@ -3,13 +3,16 @@ import Vuex from 'vuex';
 import axios from 'axios';
 
 import auth from './modules/auth';
+import orders from './modules/orders';
 
 Vue.use(Vuex);
 axios.defaults.baseURL = 'http://localhost/api';
 
 export const store = new Vuex.Store({
+    namespaced: true,
     modules: {
         auth,
+        orders,
     },
     state: {
         meals: [],
