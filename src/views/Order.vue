@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-12">
                     <obd-card
-                        v-if="weekOrders.length"
+                        v-if="weekOrders.length > 4"
                         card-title="Objednaj si obedy na tento týždeň"
                         :card-subtitle="getWeekRange('DD.MM.YYYY')"
                         v-cloak
@@ -76,14 +76,6 @@ export default {
         meals() {
             return this.$store.getters.getMeals;
         },
-        order: {
-            set(order) {
-                this.$store.commit('orders/fetchOrders', {order});
-            },
-            get() {
-                return this.$store.getters['orders/getOrders'];
-            }
-        }
     },
 
     created() {
@@ -96,12 +88,31 @@ export default {
         this.$store.dispatch('orders/fetchOrders', filter)
         .then(() => {
             this.weekOrders = this.$store.getters['orders/getOrders'];
+            this.formatWeekOrders();
         })
         .catch((e) => {
             this.flashError('Niečo sa pokazilo, nebolo možné načítať objedná.<br>Skúste obnoviť stránku.');
         });
     },
-    methods: {    
+    methods: {
+        // this method add empty order to weekOrder,
+        // because order form needs order item for every day
+        formatWeekOrders() {
+            this.getCurrentWeek.forEach((day, index) => {
+                let exists = false;
+                this.weekOrders.forEach((o) => {
+                    if (o.date == day) {
+                        exists = true;
+                    }
+                })
+                if(!exists) {
+                    this.weekOrders.splice(index, 0, {
+                        'date': day,
+                        'meal_id': null
+                    });
+                }
+            })
+        }, 
         submitOrder(e) {
             this.$store.dispatch('orders/submitOrder', this.weekOrders)
             .then(response => {

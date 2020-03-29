@@ -10,28 +10,28 @@ export default {
     getters: {
         getOrders(state) {
             return state.orders;
-        }
+        },
     },
 
     mutations: {
         fetchOrders(state, orders) {
             state.orders = orders
-            let currentWeek = time.getCurrentWeek()
+            // let currentWeek = time.getCurrentWeek()
 
-            currentWeek.forEach((day, index) => {
-                let exists = false;
-                state.orders.forEach((o) => {
-                    if (o.date == day) {
-                        exists = true;
-                    }
-                })
-                if(!exists) {
-                    state.orders.splice(index, 0, {
-                        'date': day,
-                        'meal_id': null
-                    });
-                }
-            })
+            // currentWeek.forEach((day, index) => {
+            //     let exists = false;
+            //     state.orders.forEach((o) => {
+            //         if (o.date == day) {
+            //             exists = true;
+            //         }
+            //     })
+            //     if(!exists) {
+            //         state.orders.splice(index, 0, {
+            //             'date': day,
+            //             'meal_id': null
+            //         });
+            //     }
+            // })
         }
     },
 

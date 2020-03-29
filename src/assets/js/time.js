@@ -3,7 +3,8 @@ var moment = require('moment');
 export default {
     getCurrentWeek: function() {
         let currentDate = moment()
-        let weekStart = currentDate.clone().startOf('isoWeek')
+        // let weekStart = currentDate.clone().startOf('isoWeek')
+        let weekStart = this.getWeekStart()
         let days = []
     
         for (let i = 0; i <= 4; i++) {
@@ -15,19 +16,33 @@ export default {
 
     getWeekStart: function(format) {
         let currentDate = moment()
+        let today = currentDate.isoWeekday()
 
         if(typeof format == 'undefined')
             format = 'YYYY-MM-DD'
+
+        // check if today is weekend
+        // if yes, I want to return next monday
+        // so I add one week to curent date
+        if(today > 5)
+            currentDate.add(1, 'weeks')
 
         return currentDate.startOf('isoWeek').format(format)
     },
     getWeekEnd: function(format) {
         let currentDate = moment()
+        let today = currentDate.isoWeekday()
 
         if(typeof format == 'undefined')
             format = 'YYYY-MM-DD'
 
-        // let weekEnd = currentDate.endOf('isoWeek').format(format)
+        // check if today is weekend
+        // if yes, I want to return next friday
+        // so I add one week to curent date
+        if(today > 5)
+            currentDate.add(1, 'weeks')
+
+
         return currentDate.weekday(5).format(format)
     },
     getWeekRange: function(format) {
