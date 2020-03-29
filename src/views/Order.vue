@@ -4,9 +4,10 @@
             <div class="row">
                 <div class="col-12">
                     <obd-card
-                        v-if="order.length"
+                        v-if="weekOrders.length"
                         card-title="Objednaj si obedy na tento týždeň"
                         :card-subtitle="getWeekRange('DD.MM.YYYY')"
+                        v-cloak
                     >
                         <div slot="controls">
                             <obd-scroll
@@ -37,7 +38,7 @@
                                         :name="weekDaysEn[indexDay].toLowerCase() + '-meal'"
                                         :id="weekDaysEn[indexDay].toLowerCase() + '-' + indexMeal" 
                                         :value="meal.id"
-                                        v-model="order[indexDay].meal_id"
+                                        v-model="weekOrders[indexDay].meal_id"
                                         :key="meal.id"
                                         :disabled="isPassedDate(date)"
                                     >
@@ -64,11 +65,13 @@ import axios from 'axios';
 
 export default {
     mixins: [timeMixin],
-    // data() {
-    //     return {
-    //         localOrder: [],
-    //     }
-    // },
+
+    data() {
+        return {
+            weekOrders: []
+        }
+    },
+
     computed: {
         meals() {
             return this.$store.getters.getMeals;
@@ -89,24 +92,18 @@ export default {
             this.flashError('Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.');
         });
 
-        // this.addDateToOrder();
-
         let filter = '?filter[date_from]=' + this.getWeekStart() + '&filter[date_to]=' + this.getWeekEnd();
         this.$store.dispatch('orders/fetchOrders', filter)
+        .then(() => {
+            this.weekOrders = this.$store.getters['orders/getOrders'];
+        })
         .catch((e) => {
             this.flashError('Niečo sa pokazilo, nebolo možné načítať objedná.<br>Skúste obnoviť stránku.');
         });
     },
-    methods: {
-        // addDateToOrder() {
-        //     this.order.forEach((o, index) => {
-        //         if(o.date == null)
-        //             o.date = this.getCurrentWeek[index]
-        //     })
-        // },
-        
+    methods: {    
         submitOrder(e) {
-            this.$store.dispatch('orders/submitOrder')
+            this.$store.dispatch('orders/submitOrder', this.weekOrders)
             .then(response => {
                 this.flashSuccess('Obedy boli uložené.', {
                     timeout: 3000,

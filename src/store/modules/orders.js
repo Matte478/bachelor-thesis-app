@@ -56,12 +56,12 @@ export default {
             })
         },
 
-        submitOrder(context) {
+        submitOrder(context, orders) {
             axios.defaults.headers.common['Authorization'] = context.rootState.auth.tokenType + ' ' + context.rootState.auth.token;
 
             return new Promise((resolve, reject) => {
                 axios.post('/orders', {
-                    orders: context.state.orders
+                    orders: orders
                 })
                 .then(response => {
                     resolve(response);
