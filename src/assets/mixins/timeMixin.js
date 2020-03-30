@@ -38,6 +38,9 @@ export default {
         getWeekRange: function(format) {
             return time.getWeekRange(format)
         },
+        getToday: function(format) {
+            return time.getToday(format)
+        },
         isPassedDate: function(date) {
             return time.isPassedDate(date)
         },

@@ -61,7 +61,7 @@
 
 <script>
 import timeMixin from '../assets/mixins/timeMixin';
-import axios from 'axios';
+// import axios from 'axios';
 
 export default {
     mixins: [timeMixin],

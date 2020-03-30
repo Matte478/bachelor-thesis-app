@@ -50,6 +50,7 @@ export default {
 <style lang="scss">
 
 @import '~@fortawesome/fontawesome-free/css/all.min.css';
+@import "vue-select/src/scss/vue-select.scss";
 
 * {
     box-sizing: border-box;

@@ -42,7 +42,6 @@ export default {
         if(today > 5)
             currentDate.add(1, 'weeks')
 
-
         return currentDate.weekday(5).format(format)
     },
     getWeekRange: function(format) {
@@ -53,6 +52,12 @@ export default {
         let end = this.getWeekEnd(format)
 
         return start + ' - ' + end
+    },
+    getToday: function(format) {
+        if(typeof format == 'undefined')
+            format = 'YYYY-MM-DD' 
+        
+        return moment().format(format)
     },
     isPassedDate: function(date) {
         return moment().isAfter(date)

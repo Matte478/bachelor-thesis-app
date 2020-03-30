@@ -10,6 +10,9 @@
                     <router-link :to="{ name: 'restaurant-dashboard' }"><i class="fas fa-tachometer-alt"></i> Dashboard</router-link>
                 </li>
                 <li>
+                    <router-link :to="{ name: 'restaurant-orders' }"><i class="fas fa-shopping-basket"></i>Objednávky</router-link>
+                </li>
+                <li>
                     <router-link :to="{ name: 'restaurant-menu' }"><i class="fas fa-utensils"></i> Naše menu</router-link>
                 </li>
                 <!-- <li>
@@ -63,9 +66,9 @@ export default {
 
 <style lang="scss" scoped>
 
-.section--admin {
+.section {
     position: relative;
-    padding: 20px 0;
+    padding: 30px 0;
 }
 
 .admin-wrapper {

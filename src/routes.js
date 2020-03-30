@@ -13,6 +13,7 @@ import Admin from './views/layouts/Admin';
 import RestaurantDashboard from './views/admin/restaurant/Dashboard';
 import RestaurantMenu from './views/admin/restaurant/Menu';
 import RestaurantClients from './views/admin/restaurant/Client';
+import RestaurantOrders from './views/admin/restaurant/Orders'
 
 // client
 import ClientContractor from './views/admin/client/Contractor';
@@ -85,6 +86,11 @@ const routes = [
                 path: 'clients',
                 name: 'restaurant-clients',
                 component: RestaurantClients,
+            },
+            {
+                path: 'orders',
+                name: 'restaurant-orders',
+                component: RestaurantOrders,
             },
 
             {
