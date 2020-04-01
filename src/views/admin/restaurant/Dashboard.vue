@@ -52,7 +52,7 @@ export default {
         //     this.formatWeekOrders();
         // })
         .catch((e) => {
-            this.flashError('Niečo sa pokazilo, nebolo možné načítať objedná.<br>Skúste obnoviť stránku.');
+            this.flashError('Niečo sa pokazilo, nebolo možné načítať objednávky.<br>Skúste obnoviť stránku.');
         });
     }
 }

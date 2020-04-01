@@ -1,13 +1,26 @@
 <template>
-<section class="section section--dashboard">
+    <section class="section section--dashboard">
+        <obd-modal :active="orderDetailPopup" @closed="closeDetail" class="pop-up" modal-title="Detail objednávky" :modal-subtitle="modalSubtitle">
+            <pre>
+            {{ orderDetail }}
+            </pre>
+        </obd-modal>
         <obd-card card-title="Objednávky">
             <div slot="controls" class="filter">
+                zobrazenie
+                <input type="radio" name="view" value="day" id="view-day">
+                <label for="view-day">denne</label>
+
+                <input type="radio" name="view" value="month" id="view-month">
+                <label for="view-month">mesacne</label>
                 <div class="select">
                     <v-select
                         multiple
                         v-model="company"
                         :options="companies"
                         style="height: 35px"
+                        label="Start Time"
+                        placeholder="Všetci klienti"
                     />
                 </div>
                 <div class="calendar">
@@ -33,23 +46,61 @@
                     />
                 </div>
             </div>
-            od: {{ dateFrom }} do: {{ dateTo }} <br />
-            <pre>
-                {{ orders }}
-            </pre>
+
+            <div>
+                <div
+                    class="day-box"
+                    v-for="(order, date) in orders"
+                    :key="date"
+                >
+                    <h2 class="day-box__date">{{formatDate(date)}}</h2>
+                    <obd-table
+                        class="day-box__table"
+                        :data="JSON.stringify(formatCompanyOrders(order, date))"
+                        :columns="JSON.stringify(columns)"
+                        :actions="JSON.stringify(tableActions)"
+                        @action="action"
+                    />
+                </div> 
+            </div>
         </obd-card>
     </section>    
 </template>
 
 <script>
 import moment from 'moment';
+import timeMixin from '../../../assets/mixins/timeMixin';
  
 export default {
+    mixins: [timeMixin],
+
     data() {
         return {
             dateFrom: '',
             dateTo: '',
             company: [],
+
+            orderDetail: [],
+            orderDetailPopup: false,
+            modalSubtitle: '',
+
+            columns: [
+                {
+                    "key": "company",
+                    "text": "Klient"
+                },
+                {
+                    "key": "price",
+                    "text": "Cena objednávky"
+                },
+            ],
+            tableActions: [
+                {
+                    "text": "Detail",
+                    "action": "detail",
+                    "color": "#2d4059"
+                },
+            ],
         }
     },
     computed: {
@@ -64,13 +115,13 @@ export default {
             return [
                 'company 1', 'company 2', 'company 3'
             ]
-        }
+        },
     },
     created() {
         this.$store.dispatch('orders/fetchOrders', this.filter)
 
         .catch((e) => {
-            this.flashError('Niečo sa pokazilo, nebolo možné načítať objedná.<br>Skúste obnoviť stránku.');
+            this.flashError('Niečo sa pokazilo, nebolo možné načítať objednávky.<br>Skúste obnoviť stránku.');
         });
     },
     watch: {
@@ -84,6 +135,36 @@ export default {
     methods: {
         fixDate(event){
             return moment(event).format('YYYY-MM-DD');
+        },
+        formatCompanyOrders(orders, date) {
+            let parsedobj = JSON.parse(JSON.stringify(orders));
+            let formated = [];
+
+            Object.keys(parsedobj).map((key) => {
+                formated.push({
+                    'id': date + '#' + key,
+                    'company': key,
+                    'price': parsedobj[key].price + '€'
+                })
+            })
+            
+            return formated;
+        },
+        openDetail(id) {
+            let parsed = id.split("#");
+            this.orderDetail = this.orders[parsed[0]][parsed[1]];
+            this.modalSubtitle = this.formatDate(parsed[0]) + ' / ' + parsed[1];
+            this.orderDetailPopup = true;
+        },
+        closeDetail() {
+            this.orderDetailPopup = false;
+        },
+        action(e) {
+            switch(e.detail.action) {
+                case 'detail': 
+                    this.openDetail(e.detail.id);
+                    break;
+            }
         },
     }
 }
@@ -167,5 +248,25 @@ export default {
     width: 12px;
     height: 3px;
     background-color: $color-primary-3;
+}
+
+.day-box {
+    margin-bottom: 2.5em;
+    &__date {
+        margin-bottom: 0.3em;
+        color: $color-primary-1;
+    }
+}
+
+.pop-up {
+    position: fixed;
+    display: block;
+    z-index: 150;
+    width: 90%;
+    max-width: 1000px;
+    left: 50%;
+    top: calc(50vh - 62px);
+    transform: translate(-50%, -50%);
+    visibility: visible;
 }
 </style>
