@@ -1,9 +1,27 @@
 <template>
     <section class="section section--dashboard">
-        <obd-modal :active="orderDetailPopup" @closed="closeDetail" class="pop-up" modal-title="Detail objednávky" :modal-subtitle="modalSubtitle">
+        <obd-modal
+            class="pop-up"
+            :active="orderDetailPopup"
+            @closed="closeDetail"
+            modal-title="Detail objednávky"
+            :modal-subtitle="modalSubtitle"
+            v-if="orderDetail.meals"
+        >
+            <div slot="controls">
+                <h3 class="pop-up__price">Cena objednávky: <span>{{ orderDetail.price }}€</span></h3>
+            </div>
+
+            <obd-table
+                class="pop-up__table"
+                :data="JSON.stringify(formatMealsForDetail(orderDetail.meals))"
+                :columns="JSON.stringify(columnsDetail)"
+            />
+
+            <!-- {{formatMealsForDetail(orderDetail.meals)}}
             <pre>
             {{ orderDetail }}
-            </pre>
+            </pre>  -->
         </obd-modal>
         <obd-card card-title="Objednávky">
             <div slot="controls" class="filter">
@@ -101,6 +119,20 @@ export default {
                     "color": "#2d4059"
                 },
             ],
+            columnsDetail: [
+                {
+                    "key": "meal",
+                    "text": "Jedlo"
+                },
+                {
+                    "key": "count",
+                    "text": "Množstvo"
+                },
+                {
+                    "key": "price",
+                    "text": "Cena za ks"
+                },
+            ],
         }
     },
     computed: {
@@ -148,6 +180,20 @@ export default {
                 })
             })
             
+            return formated;
+        },
+        formatMealsForDetail(meals) {
+            let formated = [];
+
+            Object.keys(meals).map((key) => {
+                formated.push({
+                    'id': meals[key].meal_id,
+                    'meal': meals[key].meal,
+                    'count': meals[key].count,
+                    'price': meals[key].price + '€'
+                })
+            })
+
             return formated;
         },
         openDetail(id) {
@@ -268,5 +314,9 @@ export default {
     top: calc(50vh - 62px);
     transform: translate(-50%, -50%);
     visibility: visible;
+
+    &__price {
+        color: $color-primary-1;
+    }
 }
 </style>
