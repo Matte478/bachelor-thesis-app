@@ -1,6 +1,7 @@
 <template>
     <section class="section section--admin">
-        <obd-modal :active="newMealPopup" @closed="closePopup" class="pop-up" modal-title="Pridať jedlo" modal-subtitle="Pridajte nové jedlo do ponuky">
+        <obd-modal
+            :active="newMealPopup" @closed="closePopup" class="pop-up" modal-title="Pridať jedlo" modal-subtitle="Pridajte nové jedlo do ponuky">
             <form class="form" action="#" @submit.prevent="addMeal">
                 <div class="form-group">
                     <label for="meal">Názov jedla</label>
@@ -46,7 +47,7 @@
 
         <div class="row">
             <div class="col-12">
-                <obd-card card-title="Menu">
+                <obd-card card-title="Menu" v-if="initialized">
                     <div slot="controls">
                         <obd-button @click="togglePopup">Pridať jedlo</obd-button>
                     </div>
@@ -69,6 +70,7 @@ import axios from 'axios';
 export default {
     data() {
         return {
+            initialized: false,
             tableActions: [
                 {
                     "text": "",
@@ -122,6 +124,9 @@ export default {
     },
     mounted() {
         this.$store.dispatch('fetchMeals')
+        .then(() => {
+            this.initialized = true;
+        })
         .catch((e) => {
             this.flashError('Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.');
         });

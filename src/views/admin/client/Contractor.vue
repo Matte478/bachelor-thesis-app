@@ -3,17 +3,18 @@
         <div class="row">
             <div class="col-12">
                 <create-agreement
-                    v-if="!hasContractor"
+                    v-if="initialized && !hasContractor"
                     @created-agreement="loadContractor"
                 />
-                <div v-else>
-                    <obd-card card-title="Váš dodávateľ">
-                        <h3 v-if="!confirmed">Dodávateľ ešte nepotvrdil vašu spoluprácu.</h3>
-                        <p>Názov reštaurácie: {{contractor.restaurant}}</p>
-                        <p>Mesto: {{contractor.city}}</p>
-                        <p>A ďalšie informácie ...</p>
-                    </obd-card>
-                </div>
+                <obd-card
+                    v-else-if="initialized"
+                    card-title="Váš dodávateľ"
+                >
+                    <h3 v-if="!confirmed">Dodávateľ ešte nepotvrdil vašu spoluprácu.</h3>
+                    <p>Názov reštaurácie: {{contractor.restaurant}}</p>
+                    <p>Mesto: {{contractor.city}}</p>
+                    <p>A ďalšie informácie ...</p>
+                </obd-card>
             </div>
         </div>
     </section>
@@ -29,6 +30,7 @@ export default {
     },
     data() {
         return {
+            initialized: false,
             hasContractor: false,
             confirmed: false,
             contractor: '',
@@ -46,9 +48,12 @@ export default {
                 this.confirmed = response.data.data.confirmed;
                 this.contractor = response.data.data.restaurant;
                 this.hasContractor = true;
+                this.initialized = true;
             })
             .catch(error => {
-                console.log(error);
+                this.hasContractor = false;
+                this.initialized = true;
+                // console.log(error);
             })
         }
     } 

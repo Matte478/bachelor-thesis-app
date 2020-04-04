@@ -1,6 +1,6 @@
 <template>
     <section class="section section--admin">
-        <obd-card card-title="Klienti">
+        <obd-card card-title="Klienti" v-if="initialized">
             <h2>Čakajúce na schválenie</h2>
             <obd-table
                 v-if="unconfirmedClients.length"
@@ -28,6 +28,7 @@ import axios from 'axios';
 export default {
     data() {
         return {
+            initialized: false,
             confirmedClients: [],
             unconfirmedClients: [],
             columns: [
@@ -66,6 +67,7 @@ export default {
                 let formated = this.formatClients(response.data.data);
                 this.confirmedClients = formated.confirmed;
                 this.unconfirmedClients = formated.unconfirmed;
+                this.initialized = true;
             })
             .catch(error => {
                 console.log(error);

@@ -1,6 +1,6 @@
 <template>
     <section class="section section--dashboard">
-        <obd-card card-title="Dashboard">
+        <obd-card card-title="Dashboard" v-if="initialized">
             <h1>Dnešné objednávky</h1>
             <div>
                 <div
@@ -33,7 +33,7 @@ export default {
 
     data() {
         return {
-
+            initialized: false,
         }
     },
 
@@ -47,10 +47,11 @@ export default {
         // let filter = '?filter[date]=' + this.getToday();
         let filter = '?filter[date]=2020-04-03';
         this.$store.dispatch('orders/fetchOrders', filter)
-        // .then(() => {
-        //     this.weekOrders = this.$store.getters['orders/getOrders'];
-        //     this.formatWeekOrders();
-        // })
+        .then(() => {
+            this.initialized = true;
+            // this.weekOrders = this.$store.getters['orders/getOrders'];
+            // this.formatWeekOrders();
+        })
         .catch((e) => {
             this.flashError('Niečo sa pokazilo, nebolo možné načítať objednávky.<br>Skúste obnoviť stránku.');
         });

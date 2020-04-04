@@ -13,7 +13,7 @@
                     <router-link :to="{ name: 'restaurant-orders' }"><i class="fas fa-shopping-basket"></i>Objednávky</router-link>
                 </li>
                 <li>
-                    <router-link :to="{ name: 'restaurant-menu' }"><i class="fas fa-utensils"></i> Naše menu</router-link>
+                    <router-link :to="{ name: 'restaurant-menu' }"><i class="fas fa-utensils"></i> Menu</router-link>
                 </li>
                 <!-- <li>
                     <router-link :to="{ name: 'restaurant-week-offer' }"><i class="fas fa-calendar-week"></i> Týždenná ponuka</router-link>

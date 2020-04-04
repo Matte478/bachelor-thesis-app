@@ -50,9 +50,6 @@ export default {
                 case 'selectContractor':
                     this.createAgreement(e.detail.id)
                     break;
-                case 'delete':
-                    this.deleteMeal(e.detail.id);
-                    break;
             }
         },
 

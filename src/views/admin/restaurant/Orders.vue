@@ -99,7 +99,7 @@
                 </div>
             </div>   
         </obd-modal>
-        <obd-card card-title="Objednávky">
+        <obd-card card-title="Objednávky" v-if="initialized">
             <div slot="controls">
                 <obd-button @click="openFilter">Filter</obd-button>
             </div>
@@ -110,7 +110,7 @@
                     v-for="(order, date) in orders"
                     :key="date"
                 >
-                    <h2 class="day-box__date">{{formatDate(date)}}</h2>
+                    <h2 class="day-box__date">{{formatDate(date, dateFormat)}}</h2>
                     <obd-table
                         class="day-box__table"
                         :data="JSON.stringify(formatCompanyOrders(order, date))"
@@ -140,6 +140,7 @@ export default {
             clients: [],
             selectedClients: [],
             view: 'days',
+            initialized: false,
 
             orderDetail: [],
             orderDetailPopup: false,
@@ -192,11 +193,16 @@ export default {
         },
         filterVariables() {
             return this.view, this.dateFrom, this.dateTo, this.selectedClients;
+        },
+        dateFormat() {
+            return this.view == 'months' ? 'MMMM YYYY' : 'DD.MM.YYYY';
         }
     },
     created() {
         this.$store.dispatch('orders/fetchOrders', this.filter)
-
+        .then(() => {
+            this.initialized = true;
+        })
         .catch((e) => {
             this.flashError('Niečo sa pokazilo, nebolo možné načítať objednávky.<br>Skúste obnoviť stránku.');
         });
@@ -210,7 +216,6 @@ export default {
     },
     methods: {
         openFilter() {
-            console.log('open filter')
             this.filterPopup = true;
         },
         closeFilter() {

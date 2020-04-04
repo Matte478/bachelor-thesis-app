@@ -1,4 +1,5 @@
-var moment = require('moment');
+var moment = require('moment')
+moment.locale('sk')
 
 export default {
     getCurrentWeek: function() {
