@@ -31,7 +31,7 @@
                     <router-link :to="{ name: 'client-contractor' }"><i class="fas fa-tachometer-alt"></i> Dodávateľ</router-link>
                 </li>
                 <li>
-                    <a href="#"><i class="fas fa-users"></i> Zamestnanci</a>
+                    <router-link :to="{ name: 'client-employees' }"><i class="fas fa-users"></i> Zamestnanci</router-link>
                 </li>
             </ul>
         </nav>

@@ -17,6 +17,7 @@ import RestaurantOrders from './views/admin/restaurant/Orders'
 
 // client
 import ClientContractor from './views/admin/client/Contractor';
+import ClientEmployees from './views/admin/client/Employees';
 import Orders from './views/Order';
 
 const routes = [
@@ -97,6 +98,11 @@ const routes = [
                 path: 'contractor',
                 name: 'client-contractor',
                 component: ClientContractor,
+            },
+            {
+                path: 'employees',
+                name: 'client-employees',
+                component: ClientEmployees,
             },
           ]
     },

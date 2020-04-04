@@ -1,5 +1,5 @@
 <template>
-    <section class="section section--dashboard">
+    <section class="section">
         <obd-modal
             class="pop-up"
             :active="orderDetailPopup"
@@ -18,46 +18,90 @@
                 :columns="JSON.stringify(columnsDetail)"
             />
         </obd-modal>
-        <obd-card card-title="Objednávky">
-            <div slot="controls" class="filter">
-                zobrazenie
-                <input type="radio" name="view" value="day" id="view-day">
-                <label for="view-day">denne</label>
 
-                <input type="radio" name="view" value="month" id="view-month">
-                <label for="view-month">mesacne</label>
-                <div class="select">
-                    <v-select
-                        multiple
-                        v-model="selectedClients"
-                        :options="clients"
-                        style="height: 35px"
-                        label="Start Time"
-                        placeholder="Všetci klienti"
-                    />
+        <obd-modal
+            class="pop-up pop-up--filter"
+            :active="filterPopup"
+            @closed="closeFilter"
+            modal-title="Filter objednávok"
+        >
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="select">
+                            <v-select
+                                multiple
+                                v-model="selectedClients"
+                                :options="clients"
+                                style="height: 35px"
+                                label="Start Time"
+                                placeholder="Všetci klienti"
+                            />
+                        </div>
+                    </div>
                 </div>
-                <div class="calendar">
-                    <datepicker
-                        calendar-class="calendar__picker"
-                        input-class="calendar__input"
-                        format="dd.MM.yyyy"
-                        placeholder="Dátum od"
-                        :value="dateFrom"
-                        @input="dateFrom = fixDate($event)"
-                        tint-color="#188c33"
-                    />
+                <div class="row">
+                    <div class="col">
+                        <div class="calendar">
+                            <datepicker
+                                calendar-class="calendar__picker"
+                                input-class="calendar__input"
+                                format="dd.MM.yyyy"
+                                placeholder="Dátum od"
+                                :value="dateFrom"
+                                @input="dateFrom = fixDate($event)"
+                            />
+                        </div>
+                        <span class="delimer" />
+                        <div class="calendar">
+                            <datepicker
+                                calendar-class="calendar__picker"
+                                input-class="calendar__input"
+                                format="dd.MM.yyyy"
+                                placeholder="Dátum do"
+                                :value="dateTo"
+                                @input="dateTo = fixDate($event)"
+                            />
+                        </div>
+                    </div>
                 </div>
-                <span class="delimer" />
-                <div class="calendar">
-                    <datepicker
-                        calendar-class="calendar__picker"
-                        input-class="calendar__input"
-                        format="dd.MM.yyyy"
-                        placeholder="Dátum do"
-                        :value="dateTo"
-                        @input="dateTo = fixDate($event)"
-                    />
+                <div class="row">
+                    <div class="col">
+                        zobrazenie: 
+                        <input
+                            type="radio"
+                            name="view"
+                            value="days"
+                            class="view-input"
+                            id="view-days"
+                            v-model="view"
+                        >
+                        <label
+                            for="view-days"
+                            class="view-label"
+                            :class="{active: view == 'days'}"
+                        > denné </label>
+                        /
+                        <input
+                            type="radio"
+                            name="view"
+                            value="months"
+                            class="view-input"
+                            id="view-months"
+                            v-model="view"
+                        >
+                        <label 
+                            for="view-months"
+                            class="view-label"
+                            :class="{active: view == 'months'}"
+                        > mesačné </label>
+                    </div>
                 </div>
+            </div>   
+        </obd-modal>
+        <obd-card card-title="Objednávky">
+            <div slot="controls">
+                <obd-button @click="openFilter">Filter</obd-button>
             </div>
 
             <div>
@@ -90,10 +134,12 @@ export default {
 
     data() {
         return {
+            filterPopup: false,
             dateFrom: '',
             dateTo: '',
             clients: [],
             selectedClients: [],
+            view: 'days',
 
             orderDetail: [],
             orderDetailPopup: false,
@@ -142,8 +188,11 @@ export default {
                 selectedClients = this.selectedClients.toString();
             }
 
-            return '?filter[date_from]=' + this.dateFrom + '&filter[date_to]=' + this.dateTo + '&filter[company]=' + selectedClients;
+            return '/' + this.view + '?filter[date_from]=' + this.dateFrom + '&filter[date_to]=' + this.dateTo + '&filter[company]=' + selectedClients;
         },
+        filterVariables() {
+            return this.view, this.dateFrom, this.dateTo, this.selectedClients;
+        }
     },
     created() {
         this.$store.dispatch('orders/fetchOrders', this.filter)
@@ -155,17 +204,18 @@ export default {
         this.loadClients();
     },
     watch: {
-        dateFrom: function () {
+        filterVariables() {
             this.$store.dispatch('orders/fetchOrders', this.filter)
-        },
-        dateTo: function () {
-            this.$store.dispatch('orders/fetchOrders', this.filter)
-        },
-        selectedClients: function () {
-            this.$store.dispatch('orders/fetchOrders', this.filter)
-        },
+        }
     },
     methods: {
+        openFilter() {
+            console.log('open filter')
+            this.filterPopup = true;
+        },
+        closeFilter() {
+            this.filterPopup = false;
+        },
         fixDate(event){
             return moment(event).format('YYYY-MM-DD');
         },
@@ -200,7 +250,7 @@ export default {
         openDetail(id) {
             let parsed = id.split("#");
             this.orderDetail = this.orders[parsed[0]][parsed[1]];
-            this.modalSubtitle = this.formatDate(parsed[0]) + ' / ' + parsed[1];
+            this.modalSubtitle = this.formatDate(parsed[0]) + ' | ' + parsed[1];
             this.orderDetailPopup = true;
         },
         closeDetail() {
@@ -235,81 +285,6 @@ export default {
 .section {
     padding-top: 20px;
 }
-.filter {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.select {
-    width: 250px;
-
-    .vs__clear,
-    .vs__open-indicator {
-        fill: $color-primary-3;
-    }
-    .vs__dropdown-toggle {
-        height: 100%;
-    }
-    .vs__dropdown-option--highlight {
-        background-color: $color-primary-3;
-        color: $color-white;
-    }
-    .vs__selected {
-        background-color: $color-primary-3;
-        color: $color-white;
-        border: none;
-        .vs__deselect {
-            svg path {
-                fill: $color-white;
-            }
-        }
-    }
-}
-.calendar {
-    margin: 0 0.3em;
-
-    &:last-of-type {
-        margin-right: 0;
-    }
-    &__picker {
-        right: 0;
-    }
-
-    &__input {
-        height: 35px;
-        @include font-size(14);
-        background-color: $color-primary-3;
-        color: $color-white;
-        border: none;
-        text-align: center;
-        cursor: pointer;
-
-        &:focus {
-            outline: none;
-        }
-
-        &::placeholder {
-            color: $color-white;
-            text-align: center;
-        }
-    }
-    .vdp-datepicker__calendar {
-        .cell:not(.blank):not(.disabled).day:hover {
-            border: 1px solid $color-primary-3;
-        }
-        .cell.selected,
-        .cell.selected:hover {
-           background: $color-primary-3; 
-           color: $color-white;
-        }
-    }
-}
-.delimer {
-    display: inline-block;
-    width: 12px;
-    height: 3px;
-    background-color: $color-primary-3;
-}
 
 .day-box {
     margin-bottom: 2.5em;
@@ -332,6 +307,99 @@ export default {
 
     &__price {
         color: $color-primary-1;
+    }
+
+    &--filter {
+        max-width: 500px;
+        text-align: center;
+
+        .select {
+            display: inline-block;
+            margin-bottom: 1em;
+            min-width: 250px;
+
+            .vs__clear,
+            .vs__open-indicator {
+                fill: $color-primary-3;
+            }
+            .vs__dropdown-toggle {
+                height: 100%;
+            }
+            .vs__dropdown-option--highlight {
+                background-color: $color-primary-3;
+                color: $color-white;
+            }
+            .vs__selected {
+                background-color: $color-primary-3;
+                color: $color-white;
+                border: none;
+                .vs__deselect {
+                    svg path {
+                        fill: $color-white;
+                    }
+                }
+            }
+        }
+        .calendar {
+            display: inline-block;
+            margin: 0 0.3em;
+            margin-bottom: 1em;
+
+            &:last-of-type {
+                margin-right: 0;
+            }
+            &:first-of-type {
+                margin-left: 0;
+            }
+            &__picker {
+                right: 0;
+            }
+
+            &__input {
+                height: 35px;
+                @include font-size(14);
+                background-color: $color-primary-3;
+                color: $color-white;
+                border: none;
+                text-align: center;
+                cursor: pointer;
+
+                &:focus {
+                    outline: none;
+                }
+
+                &::placeholder {
+                    color: $color-white;
+                    text-align: center;
+                }
+            }
+            .vdp-datepicker__calendar {
+                .cell:not(.blank):not(.disabled).day:hover {
+                    border: 1px solid $color-primary-3;
+                }
+                .cell.selected,
+                .cell.selected:hover {
+                background: $color-primary-3; 
+                color: $color-white;
+                }
+            }
+        }
+        .delimer {
+            display: inline-block;
+            width: 12px;
+            height: 3px;
+            background-color: $color-primary-3;
+        }
+        .view-input {
+            display: none;
+        }
+        .view-label {
+            cursor: pointer;
+            &.active {
+               font-weight: bold;
+               color: $color-primary-3;
+           } 
+        }
     }
 }
 </style>
