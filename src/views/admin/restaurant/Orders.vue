@@ -17,11 +17,6 @@
                 :data="JSON.stringify(formatMealsForDetail(orderDetail.meals))"
                 :columns="JSON.stringify(columnsDetail)"
             />
-
-            <!-- {{formatMealsForDetail(orderDetail.meals)}}
-            <pre>
-            {{ orderDetail }}
-            </pre>  -->
         </obd-modal>
         <obd-card card-title="Objednávky">
             <div slot="controls" class="filter">
@@ -34,8 +29,8 @@
                 <div class="select">
                     <v-select
                         multiple
-                        v-model="company"
-                        :options="companies"
+                        v-model="selectedClients"
+                        :options="clients"
                         style="height: 35px"
                         label="Start Time"
                         placeholder="Všetci klienti"
@@ -88,6 +83,7 @@
 <script>
 import moment from 'moment';
 import timeMixin from '../../../assets/mixins/timeMixin';
+import axios from 'axios';
  
 export default {
     mixins: [timeMixin],
@@ -96,7 +92,8 @@ export default {
         return {
             dateFrom: '',
             dateTo: '',
-            company: [],
+            clients: [],
+            selectedClients: [],
 
             orderDetail: [],
             orderDetailPopup: false,
@@ -140,13 +137,12 @@ export default {
             return this.$store.getters['orders/getOrders'];
         },
         filter() {
-            return '?filter[date_from]=' + this.dateFrom + '&filter[date_to]=' + this.dateTo;
-        },
-        companies() {
-            // TODO: fetch from API
-            return [
-                'company 1', 'company 2', 'company 3'
-            ]
+            let selectedClients = '';
+            if(this.selectedClients.length) {
+                selectedClients = this.selectedClients.toString();
+            }
+
+            return '?filter[date_from]=' + this.dateFrom + '&filter[date_to]=' + this.dateTo + '&filter[company]=' + selectedClients;
         },
     },
     created() {
@@ -155,14 +151,19 @@ export default {
         .catch((e) => {
             this.flashError('Niečo sa pokazilo, nebolo možné načítať objednávky.<br>Skúste obnoviť stránku.');
         });
+
+        this.loadClients();
     },
     watch: {
         dateFrom: function () {
             this.$store.dispatch('orders/fetchOrders', this.filter)
         },
-        dateTo: function (val) {
+        dateTo: function () {
             this.$store.dispatch('orders/fetchOrders', this.filter)
-        }
+        },
+        selectedClients: function () {
+            this.$store.dispatch('orders/fetchOrders', this.filter)
+        },
     },
     methods: {
         fixDate(event){
@@ -211,6 +212,20 @@ export default {
                     this.openDetail(e.detail.id);
                     break;
             }
+        },
+
+        loadClients() {
+            axios.defaults.headers.common['Authorization'] = this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token;
+            axios.get('/agreements?filter[confirmed]=true')
+            .then(response => {
+                let agreements = response.data.data;
+                agreements.forEach(agreement => {
+                    this.clients.push(agreement.company.company);
+                });
+            })
+            .catch(error => {
+                console.log(error);
+            })
         },
     }
 }
