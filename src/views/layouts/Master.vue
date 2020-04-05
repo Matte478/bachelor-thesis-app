@@ -95,6 +95,7 @@ body {
     position: fixed;
     right: 1%;
     bottom: 1%;
+    z-index: 100;
 }
 
 .nav {

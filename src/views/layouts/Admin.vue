@@ -33,6 +33,9 @@
                 <li>
                     <router-link :to="{ name: 'client-employees' }"><i class="fas fa-users"></i> Zamestnanci</router-link>
                 </li>
+                <li>
+                    <router-link :to="{ name: 'client-type-of-employments' }"><i class="fas fa-users"></i> Pracovné pomery</router-link>
+                </li>
             </ul>
         </nav>
     </div>
@@ -110,7 +113,7 @@ export default {
         height: calc(100vh - 68px);
         z-index: 5;
         color: $color-white;
-        overflow: scroll;
+        overflow: hidden scroll;
         background-color: lighten($color-primary-1, 4%);
 
         &__toggle {
