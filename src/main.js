@@ -4,7 +4,7 @@ import routes from './routes'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
 import Master from './views/layouts/Master'
-import {store} from './store/store'
+import { store } from './store/store'
 import VueFlashMessage from 'vue-flash-message'
 import Datepicker from 'vuejs-datepicker'
 import vSelect from 'vue-select'
@@ -37,36 +37,36 @@ Vue.component('datepicker', Datepicker)
 Vue.component('v-select', vSelect)
 
 const router = new VueRouter({
-    routes: routes,
-    mode: 'history',
+  routes: routes,
+  mode: 'history',
 })
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        // this route requires auth, check if logged in
-        // if not, redirect to login page.
-        if (!store.getters.loggedIn) {
-            next({
-                name: 'login',
-            })
-        } else {
-            next()
-        }
-    } else if (to.matched.some(record => record.meta.requiresVisitor)) {
-        if (store.getters.loggedIn) {
-            next({
-                name: 'home',
-            })
-        } else {
-            next()
-        }
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (!store.getters.loggedIn) {
+      next({
+        name: 'login',
+      })
     } else {
-        next() // make sure to always call next()!
+      next()
     }
+  } else if (to.matched.some(record => record.meta.requiresVisitor)) {
+    if (store.getters.loggedIn) {
+      next({
+        name: 'home',
+      })
+    } else {
+      next()
+    }
+  } else {
+    next() // make sure to always call next()!
+  }
 })
 
 new Vue({
-    render: h => h(Master),
-    router: router,
-    store: store,
+  render: h => h(Master),
+  router: router,
+  store: store,
 }).$mount('#app')

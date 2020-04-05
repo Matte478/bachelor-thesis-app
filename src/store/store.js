@@ -1,52 +1,52 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import axios from 'axios';
+import Vue from 'vue'
+import Vuex from 'vuex'
+import axios from 'axios'
 
-import auth from './modules/auth';
-import orders from './modules/orders';
-import typeOfEmployments from './modules/typeOfEmployments';
+import auth from './modules/auth'
+import orders from './modules/orders'
+import typeOfEmployments from './modules/typeOfEmployments'
 
-Vue.use(Vuex);
-axios.defaults.baseURL = 'http://localhost/api';
+Vue.use(Vuex)
+axios.defaults.baseURL = 'http://localhost/api'
 
 export const store = new Vuex.Store({
-    namespaced: true,
-    modules: {
-        auth,
-        orders,
-        typeOfEmployments,
-    },
-    state: {
-        meals: [],
-    },
+  namespaced: true,
+  modules: {
+    auth,
+    orders,
+    typeOfEmployments,
+  },
+  state: {
+    meals: [],
+  },
 
-    getters: {
-        getMeals(state) {
-            return state.meals;
-        }
-    },
-
-    mutations: {
-        fetchMeals(state, meals) {
-            state.meals = meals
-        }
-    },
-
-    actions: {
-        fetchMeals(context) {
-            axios.defaults.headers.common['Authorization'] = context.state.auth.tokenType + ' ' + context.state.auth.token;
-            
-            return new Promise((resolve, reject) => {
-                axios.get('/meals')
-                .then(response => {
-                    context.commit('fetchMeals', response.data.data);
-                    resolve();
-                })
-                .catch(error => {
-                    console.log(error);
-                    reject(error);
-                })
-            })
-        }
+  getters: {
+    getMeals(state) {
+      return state.meals
     }
+  },
+
+  mutations: {
+    fetchMeals(state, meals) {
+      state.meals = meals
+    }
+  },
+
+  actions: {
+    fetchMeals(context) {
+      axios.defaults.headers.common['Authorization'] = context.state.auth.tokenType + ' ' + context.state.auth.token
+
+      return new Promise((resolve, reject) => {
+        axios.get('/meals')
+          .then(response => {
+            context.commit('fetchMeals', response.data.data)
+            resolve()
+          })
+          .catch(error => {
+            console.log(error)
+            reject(error)
+          })
+      })
+    }
+  }
 })
