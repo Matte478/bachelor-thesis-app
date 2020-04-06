@@ -38,7 +38,6 @@
             />
           </div>
         </div>
-        ``
         <div class="form-group">
           <obd-button
             type="submit"

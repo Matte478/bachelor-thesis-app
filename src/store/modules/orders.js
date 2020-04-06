@@ -6,7 +6,6 @@ export default {
     orders: []
   },
 
-  
   getters: {
     getOrders(state) {
       return state.orders

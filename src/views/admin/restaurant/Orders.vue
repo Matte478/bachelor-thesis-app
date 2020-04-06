@@ -79,7 +79,7 @@
             <label
               for="view-days"
               class="view-label"
-              :class="{active: view == 'days'}"
+              :class="{ active: view == 'days' }"
             > denné </label>
             /
             <input
@@ -93,7 +93,7 @@
             <label
               for="view-months"
               class="view-label"
-              :class="{active: view == 'months'}"
+              :class="{ active: view == 'months' }"
             > mesačné </label>
           </div>
         </div>
@@ -113,7 +113,7 @@
           v-for="(order, date) in orders"
           :key="date"
         >
-          <h2 class="day-box__date">{{formatDate(date, dateFormat)}}</h2>
+          <h2 class="day-box__date">{{ formatDate(date, dateFormat) }}</h2>
           <obd-table
             class="day-box__table"
             :data="JSON.stringify(formatCompanyOrders(order, date))"
@@ -339,28 +339,6 @@ export default {
       display: inline-block;
       margin-bottom: 1em;
       min-width: 250px;
-
-      .vs__clear,
-      .vs__open-indicator {
-        fill: $color-primary-3;
-      }
-      .vs__dropdown-toggle {
-        height: 100%;
-      }
-      .vs__dropdown-option--highlight {
-        background-color: $color-primary-3;
-        color: $color-white;
-      }
-      .vs__selected {
-        background-color: $color-primary-3;
-        color: $color-white;
-        border: none;
-        .vs__deselect {
-          svg path {
-            fill: $color-white;
-          }
-        }
-      }
     }
     .calendar {
       display: inline-block;

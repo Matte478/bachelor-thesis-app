@@ -4,6 +4,7 @@ import axios from 'axios'
 
 import auth from './modules/auth'
 import orders from './modules/orders'
+import employees from './modules/employees'
 import typeOfEmployments from './modules/typeOfEmployments'
 
 Vue.use(Vuex)
@@ -14,6 +15,7 @@ export const store = new Vuex.Store({
   modules: {
     auth,
     orders,
+    employees,
     typeOfEmployments,
   },
   state: {
