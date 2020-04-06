@@ -1,99 +1,19 @@
 <template>
   <section class="section">
-    <obd-modal
+    <type-of-employments-add-new
       :active="newTypePopup"
       @closed="closePopup"
-      class="pop-up"
-      modal-title="Pridať pracovný pomer"
-      modal-subtitle="Pridajte nový druh pracovného pomeru a jeho príspevok"
-    >
-      <form
-        class="form"
-        action="#"
-        @submit.prevent="addType"
-      >
-        <div class="form-group">
-          <label for="meal">Názov pracovného pomeru</label>
-          <div class="input-group">
-            <input
-              type="text"
-              name="name"
-              id="name"
-              class="input"
-              v-model="newType.name"
-            />
-          </div>
-        </div>
+      @added-new-type="addedNewType"
+      @error="closePopup"
+    />
 
-        <div class="form-group">
-          <label for="price">Príspevok v €</label>
-          <div class="input-group">
-            <input
-              type="number"
-              step="0.01"
-              name="contribution"
-              id="contribution"
-              class="input"
-              v-model="newType.contribution"
-            />
-          </div>
-        </div>
-        <div class="form-group">
-          <obd-button
-            type="submit"
-            block
-          >Pridať pracovný pomer</obd-button>
-        </div>
-      </form>
-    </obd-modal>
-
-    <obd-modal
+    <type-of-employments-edit
       :active="editTypePopup"
+      :typeId="editableId"
       @closed="closeEditPopup"
-      class="pop-up"
-      modal-title="Upraviť pracovný pomer"
-      modal-subtitle="Upravte existujúci pracovný pomer"
-    >
-      <form
-        class="form"
-        action="#"
-        @submit.prevent="editType"
-      >
-        <div class="form-group">
-          <label for="meal">Názov jedla</label>
-          <div class="input-group">
-            <input
-              type="text"
-              name="name"
-              id="name"
-              class="input"
-              v-model="editableType.name"
-            />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="price">Cena v €</label>
-          <div class="input-group">
-            <input
-              type="number"
-              step="0.01"
-              name="contribution"
-              id="contribution"
-              class="input"
-              v-model="editableType.contribution"
-            />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <obd-button
-            type="submit"
-            block
-          >Upraviť jedlo</obd-button>
-        </div>
-      </form>
-    </obd-modal>
+      @edited-type="editedType"
+      @error="closeEditPopup"
+    />
 
     <obd-card
       v-if="initialized"
@@ -116,8 +36,15 @@
 
 <script>
 import axios from 'axios'
+import typeOfEmploymentsAddNew from './components/TypeOfEmploymentsAddNew'
+import typeOfEmploymentsEdit from './components/TypeOfEmploymentsEdit'
 
 export default {
+  components: {
+    typeOfEmploymentsAddNew,
+    typeOfEmploymentsEdit,
+  },
+
   data() {
     return {
       initialized: false,
@@ -129,6 +56,7 @@ export default {
       },
 
       editTypePopup: false,
+      editableId: '',
       editableType: {
         id: '',
         name: '',
@@ -170,12 +98,23 @@ export default {
     action(e) {
       switch (e.detail.action) {
         case 'edit':
-          this.openEditPopup(e.detail.id)
+          this.editableId = e.detail.id
+          this.editTypePopup = true
           break
         case 'delete':
           this.deleteType(e.detail.id)
           break
       }
+    },
+
+    addedNewType() {
+      this.loadTypeOfEmployments()
+      this.closePopup()
+    },
+
+    editedType() {
+      this.loadTypeOfEmployments()
+      this.closeEditPopup()
     },
 
     loadTypeOfEmployments() {
@@ -196,72 +135,12 @@ export default {
 
     togglePopup() {
       this.newTypePopup = !this.newTypePopup
-      document.body.classList.toggle('overlay')
     },
     closePopup() {
       this.newTypePopup = false
     },
-
-    addType() {
-      this.$store
-        .dispatch('typeOfEmployments/submitTypeOfEmployment', this.newType)
-        .then(() => {
-          this.loadTypeOfEmployments()
-          this.newType.name = ''
-          this.newType.contribution = ''
-          this.flashSuccess('Nový pracovný pomer bol úspešne pridaný.', {
-            timeout: 3000,
-          })
-        })
-        .catch(e => {
-          this.flashError(
-            'Niečo sa pokazilo, nebolo možné pridať nový pracovný pomer.',
-          )
-        })
-
-      this.togglePopup()
-    },
-
-    openEditPopup(typeId) {
-      this.$store
-        .dispatch('typeOfEmployments/fetchTypeOfEmployments', typeId)
-        .then(() => {
-          this.editableType = this.$store.getters[
-            'typeOfEmployments/getTypeOfEmployments'
-          ]
-          document.body.classList.add('overlay')
-          this.editTypePopup = true
-        })
-        .catch(e => {
-          this.flashError('Niečo sa pokazilo.')
-        })
-    },
-
-    editType(typeId) {
-      this.$store
-        .dispatch('typeOfEmployments/editTypeOfEmployment', this.editableType)
-        .then(() => {
-          this.loadTypeOfEmployments()
-          this.flashSuccess('Pracovný pomer bol úspešne upravený.', {
-            timeout: 3000,
-          })
-        })
-        .catch(e => {
-          this.flashError(
-            'Niečo sa pokazilo, nebolo možné upraviť pracovný pomer.',
-          )
-        })
-
-      this.toggleEditPopup()
-    },
-
-    toggleEditPopup() {
-      this.editTypePopup = !this.editTypePopup
-      document.body.classList.toggle('overlay')
-    },
     closeEditPopup() {
       this.editTypePopup = false
-      document.body.classList.remove('overlay')
     },
 
     deleteType(typeId) {
