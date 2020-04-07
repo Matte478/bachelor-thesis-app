@@ -57,11 +57,6 @@ export default {
 
       editTypePopup: false,
       editableId: '',
-      editableType: {
-        id: '',
-        name: '',
-        contribution: '',
-      },
 
       columns: [
         {

@@ -7,6 +7,14 @@
       @error="closePopup"
     />
 
+    <employees-edit
+      :active="editEmployeePopup"
+      :employeeId="editableId"
+      @closed="closeEditPopup"
+      @edited-employee="editedEmployee"
+      @error="closePopup"
+    />
+
     <obd-card
       card-title="Zamestnanci"
       v-if="initialized"
@@ -15,62 +23,36 @@
         <obd-button @click="togglePopup">Pridať zamestnanca</obd-button>
       </div>
 
-      <obd-table
-        :data="JSON.stringify(employees)"
-        :columns="JSON.stringify(columns)"
-        :actions="JSON.stringify(tableActions)"
-        @action="action"
+      <employees-table
+        :employees="employees"
+        @edit="openEditPopup"
+        @delete="deleteEmployee"
       />
     </obd-card>
   </section>
 </template>
 
 <script>
+import EmployeesTable from './components/EmployeesTable'
 import EmployeesAddNew from './components/EmployeesAddNew'
+import EmployeesEdit from './components/EmployeesEdit'
 
 export default {
   components: {
+    EmployeesTable,
     EmployeesAddNew,
+    EmployeesEdit,
   },
 
   data() {
     return {
       initialized: false,
+      employees: [],
+
       newEmployeePopup: false,
 
-      employees: [],
-      columns: [
-        {
-          key: 'id',
-          text: 'ID',
-        },
-        {
-          key: 'name',
-          text: 'Meno',
-        },
-        {
-          key: 'email',
-          text: 'Email',
-        },
-        {
-          key: 'type-of-employment',
-          text: 'Druh pracovného pomeru',
-        },
-      ],
-      tableActions: [
-        {
-          text: '',
-          action: 'edit',
-          icon: 'fas fa-edit',
-          color: '#2d4059',
-        },
-        {
-          text: '',
-          action: 'delete',
-          icon: 'fas fa-trash-alt',
-          color: '#ea5455',
-        },
-      ],
+      editEmployeePopup: false,
+      editableId: '',
     }
   },
 
@@ -79,17 +61,9 @@ export default {
   },
 
   methods: {
-    action(e) {
-      switch (e.detail.action) {
-        case 'edit':
-          // this.openEditPopup(e.detail.id)
-          console.log('edit', e.detail)
-          break
-        case 'delete':
-          // this.deleteType(e.detail.id)
-          console.log('delete', e.detail)
-          break
-      }
+    openEditPopup(id) {
+      this.editableId = id
+      this.editEmployeePopup = true
     },
 
     getProperty: function(name) {
@@ -102,10 +76,39 @@ export default {
     closePopup() {
       this.newEmployeePopup = false
     },
+    closeEditPopup() {
+      this.editEmployeePopup = false
+    },
 
     addedEmployee() {
       this.loadEmployees()
       this.closePopup()
+    },
+
+    editedEmployee() {
+      this.loadEmployees()
+      this.closeEditPopup()
+    },
+
+    deleteEmployee(id) {
+      let response = confirm('Naozaj chcete vymazať daného zamestnanca?')
+      if (response) {
+        this.$store
+          .dispatch('employees/deleteEmployee', id)
+          .then(() => {
+            let employees = this.employees.filter(employee => employee.id != id)
+            this.employees = employees
+
+            this.flashSuccess('Zamestnanec bol vymazaný.', {
+              timeout: 3000,
+            })
+          })
+          .catch(e => {
+            this.flashError(
+              'Niečo sa pokazilo, nebolo možné vymazať pracovný pomer.',
+            )
+          })
+      }
     },
 
     loadEmployees() {

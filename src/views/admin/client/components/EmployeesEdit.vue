@@ -3,12 +3,12 @@
     :active="active"
     @closed="closePopup"
     class="pop-up"
-    modal-title="Pridať nového zamestnanca"
+    modal-title="Upraviť existujúceho zamestnanca"
   >
     <form
       class="form"
       action="#"
-      @submit.prevent="addEmployee"
+      @submit.prevent="editEmployee"
     >
       <div class="form-group">
         <label for="meal">Meno a priezvisko</label>
@@ -18,7 +18,7 @@
             name="name"
             id="name"
             class="input"
-            v-model="newEmployee.name"
+            v-model="employee.name"
           />
         </div>
       </div>
@@ -30,7 +30,7 @@
             name="email"
             id="email"
             class="input"
-            v-model="newEmployee.email"
+            v-model="employee.email"
           />
         </div>
       </div>
@@ -42,7 +42,7 @@
             name="password"
             id="password"
             class="input"
-            v-model="newEmployee.password"
+            v-model="employee.password"
           />
         </div>
       </div>
@@ -54,7 +54,7 @@
             name="password_confirmation"
             id="password-confirmation"
             class="input"
-            v-model="newEmployee.password_confirmation"
+            v-model="employee.password_confirmation"
           />
         </div>
       </div>
@@ -63,7 +63,7 @@
         <div class="input-group">
           <v-select
             class="select"
-            v-model="newEmployee['type-of-employment_id']"
+            v-model="employee['type-of-employment_id']"
             label="name"
             :reduce="type => type.id"
             :options="typeOfEmployments"
@@ -76,7 +76,7 @@
         <obd-button
           type="submit"
           block
-        >Pridať zamestnanca</obd-button>
+        >Upraviť zamestnanca</obd-button>
       </div>
     </form>
   </obd-modal>
@@ -84,13 +84,21 @@
 
 <script>
 export default {
-  props: ['active'],
+  props: ['active', 'employeeId'],
 
   data() {
     return {
-      newEmployee: {},
+      employee: {},
       typeOfEmployments: [],
     }
+  },
+
+  watch: {
+    employeeId() {
+      if(this.employeeId == '') return
+    
+      this.loadEmployee()
+    },
   },
 
   created() {
@@ -113,19 +121,31 @@ export default {
         })
     },
 
-    addEmployee() {
+    loadEmployee() {
       this.$store
-        .dispatch('employees/submitEmployee', this.newEmployee)
+        .dispatch('employees/fetchEmployees', this.employeeId)
         .then(() => {
-          this.flashSuccess('Nový pracovný pomer bol úspešne pridaný.', {
-            timeout: 3000,
-          })
-          this.$emit('added-employee')
+          this.employee = this.$store.getters['employees/getEmployees']
         })
         .catch(e => {
-          console.log('error v komponente', e)
           this.flashError(
-            'Niečo sa pokazilo, nebolo možné pridať nový pracovný pomer.',
+            'Niečo sa pokazilo, nebolo možné načítať druhy pracovných pomerov.',
+          )
+        })
+    },
+
+    editEmployee() {
+      this.$store
+        .dispatch('employees/editEmployee', this.employee)
+        .then(() => {
+          this.flashSuccess('Zamestnanec bol úspešne upravený.', {
+            timeout: 3000,
+          })
+          this.$emit('edited-employee')
+        })
+        .catch(e => {
+          this.flashError(
+            'Niečo sa pokazilo, nebolo možné upraviť zamestnanca.',
           )
           this.$emit('error')
         })
