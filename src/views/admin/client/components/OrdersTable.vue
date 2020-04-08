@@ -28,12 +28,12 @@ export default {
         {
           key: 'discount_price',
           text: 'Cena s dotáciou',
-          sufix: '€',
+          suffix: '€',
         },
         {
           key: 'price',
           text: 'Plná cena',
-          sufix: '€',
+          suffix: '€',
         },
       ],
     }

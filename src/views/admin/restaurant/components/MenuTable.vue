@@ -22,7 +22,7 @@ export default {
         {
           key: 'price',
           text: 'Cena',
-          sufix: '€'
+          suffix: '€'
         },
       ],
       tableActions: [
