@@ -97,7 +97,7 @@ export default {
       '&filter[date_to]=' +
       this.getWeekEnd()
     this.$store
-      .dispatch('orders/fetchOrders', filter)
+      .dispatch('orders/fetchEmployeeOrders', filter)
       .then(() => {
         this.weekOrders = this.$store.getters['orders/getOrders']
         this.formatWeekOrders()

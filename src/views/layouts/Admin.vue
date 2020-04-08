@@ -46,6 +46,9 @@
             <router-link :to="{ name: 'client-contractor' }"><i class="fas fa-tachometer-alt"></i> Dodávateľ</router-link>
           </li>
           <li>
+            <router-link :to="{ name: 'client-orders' }"><i class="fas fa-shopping-basket"></i>Objednávky</router-link>
+          </li>
+          <li>
             <router-link :to="{ name: 'client-employees' }"><i class="fas fa-users"></i> Zamestnanci</router-link>
           </li>
           <li>

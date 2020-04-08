@@ -12,13 +12,14 @@ import Admin from './views/layouts/Admin'
 // restaurant
 import RestaurantDashboard from './views/admin/restaurant/Dashboard'
 import RestaurantMenu from './views/admin/restaurant/Menu'
-import RestaurantClients from './views/admin/restaurant/Client'
+import RestaurantClients from './views/admin/restaurant/Clients'
 import RestaurantOrders from './views/admin/restaurant/Orders'
 
 // client
 import ClientContractor from './views/admin/client/Contractor'
 import ClientEmployees from './views/admin/client/Employees'
 import ClientTypeOfEmployments from './views/admin/client/TypeOfEmployments'
+import ClientOrders from './views/admin/client/Orders'
 import Orders from './views/Order'
 
 const routes = [
@@ -99,6 +100,11 @@ const routes = [
         path: 'contractor',
         name: 'client-contractor',
         component: ClientContractor,
+      },
+      {
+        path: 'employee-orders',
+        name: 'client-orders',
+        component: ClientOrders,
       },
       {
         path: 'employees',

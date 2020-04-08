@@ -37,8 +37,9 @@ Vue.component('datepicker', Datepicker)
 Vue.component('v-select', vSelect)
 
 const router = new VueRouter({
-  routes: routes,
   mode: 'history',
+  base: process.env.BASE_URL,
+  routes: routes,
 })
 
 router.beforeEach((to, from, next) => {

@@ -16,27 +16,22 @@ export default {
     return {
       columns: [
         {
-          key: 'id',
-          text: 'ID',
-        },
-        {
           key: 'meal',
           text: 'Názov jedla',
         },
         {
           key: 'price',
-          text: 'Cena v €',
+          text: 'Cena',
+          sufix: '€'
         },
       ],
       tableActions: [
-        {
-          text: '',
+        { 
           action: 'edit',
           icon: 'fas fa-edit',
           color: '#2d4059',
         },
         {
-          text: '',
           action: 'delete',
           icon: 'fas fa-trash-alt',
           color: '#ea5455',

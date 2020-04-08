@@ -116,6 +116,7 @@
           <h2 class="day-box__date">{{ formatDate(date, dateFormat) }}</h2>
           <obd-table
             class="day-box__table"
+            layout="fixed"
             :data="JSON.stringify(formatCompanyOrders(order, date))"
             :columns="JSON.stringify(columns)"
             :actions="JSON.stringify(tableActions)"

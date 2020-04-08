@@ -55,6 +55,26 @@ export default {
       })
     },
 
+    fetchEmployeeOrders(context, filter) {
+      axios.defaults.headers.common['Authorization'] = context.rootState.auth.tokenType + ' ' + context.rootState.auth.token
+
+      if (typeof filter == 'undefined')
+        filter = ''
+
+      return new Promise((resolve, reject) => {
+        axios.get('/orders/employee' + filter)
+
+          .then(response => {
+            context.commit('fetchOrders', response.data.data)
+            resolve()
+          })
+          .catch(error => {
+            console.log(error)
+            reject(error)
+          })
+      })
+    },
+
     submitOrder(context, orders) {
       axios.defaults.headers.common['Authorization'] = context.rootState.auth.tokenType + ' ' + context.rootState.auth.token
 

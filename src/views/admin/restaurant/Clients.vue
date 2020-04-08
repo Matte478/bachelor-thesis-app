@@ -1,34 +1,31 @@
 <template>
-  <section class="section section--admin">
+  <section class="section">
     <obd-card
       card-title="Klienti"
       v-if="initialized"
     >
-      <h2>Čakajúce na schválenie</h2>
-      <obd-table
-        v-if="unconfirmedClients.length"
-        :data="JSON.stringify(unconfirmedClients)"
-        :columns="JSON.stringify(columns)"
-        :actions="JSON.stringify(tableActions)"
-        @action="action"
-      />
-      <h3 v-else>Nemáte žiadne nové žiadosti</h3>
 
-      <h2>Schválené spolupráce</h2>
-      <obd-table
-        v-if="confirmedClients.length"
-        :data="confirmedClientsStr"
-        :columns="JSON.stringify(columns)"
+      <clients-unconfirmed
+        :clients="unconfirmedClients"
+        @confirm="confirmAgreement"
       />
-      <h3 v-else>Zatiaľ nemáte žiadnych klientov</h3>
+
+      <clients-confirmed :clients="confirmedClients" />
     </obd-card>
   </section>
 </template>
 
 <script>
 import axios from 'axios'
+import ClientsConfirmed from './components/ClientsConfirmed'
+import ClientsUnconfirmed from './components/ClientsUnconfirmed'
 
 export default {
+  components: {
+    ClientsConfirmed,
+    ClientsUnconfirmed,
+  },
+
   data() {
     return {
       initialized: false,
@@ -53,11 +50,7 @@ export default {
       ],
     }
   },
-  computed: {
-    confirmedClientsStr() {
-      return JSON.stringify(this.confirmedClients)
-    },
-  },
+
   created() {
     this.loadContractor()
   },
@@ -99,14 +92,6 @@ export default {
       return {
         confirmed: confirmed,
         unconfirmed: unconfirmed,
-      }
-    },
-
-    action(e) {
-      switch (e.detail.action) {
-        case 'confirm':
-          this.confirmAgreement(e.detail.id)
-          break
       }
     },
 
