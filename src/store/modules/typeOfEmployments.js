@@ -61,7 +61,7 @@ export default {
       axios.defaults.headers.common['Authorization'] = context.rootState.auth.tokenType + ' ' + context.rootState.auth.token
 
       return new Promise((resolve, reject) => {
-        axios.post('/type-of-employments/' + type.id, {
+        axios.put('/type-of-employments/' + type.id, {
           name: type.name,
           contribution: type.contribution
         })

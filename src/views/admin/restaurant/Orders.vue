@@ -84,9 +84,11 @@ export default {
   },
 
   methods: {
-    loadOrders() {
+    loadOrders(filter) {
+      if (typeof filter == 'undefined') filter = ''
+
       this.$store
-        .dispatch('orders/fetchOrders', this.filter)
+        .dispatch('orders/fetchOrders', filter)
         .then(() => {
           this.initialized = true
         })
@@ -104,7 +106,7 @@ export default {
       this.filterPopup = false
     },
     changedFilter(filter, view) {
-      this.loadOrders()
+      this.loadOrders(filter)
       this.view = view
     },
 

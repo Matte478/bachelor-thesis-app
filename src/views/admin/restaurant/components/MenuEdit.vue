@@ -93,7 +93,7 @@ export default {
         this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token
 
       axios
-        .post('/meals/' + mealId, this.editableMeal)
+        .put('/meals/' + mealId, this.editableMeal)
         .then(() => {
           this.$store.dispatch('fetchMeals').catch(e => {
             this.flashError(

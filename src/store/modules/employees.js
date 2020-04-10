@@ -29,7 +29,7 @@ export default {
         axios.get('/employees/' + employeeId)
           .then(response => {
             context.commit('fetchEmployees', response.data.data)
-            resolve()
+            resolve(response)
           })
           .catch(error => {
             console.log(error)
@@ -57,7 +57,7 @@ export default {
       axios.defaults.headers.common['Authorization'] = context.rootState.auth.tokenType + ' ' + context.rootState.auth.token
 
       return new Promise((resolve, reject) => {
-        axios.post('/employees/' + employee.id, employee)
+        axios.put('/employees/' + employee.id, employee)
           .then(response => {
             resolve(response)
           })

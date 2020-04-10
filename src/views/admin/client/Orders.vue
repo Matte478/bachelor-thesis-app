@@ -1,25 +1,32 @@
 <template>
   <section class="section">
+
+    <orders-filter
+      :active="filterPopup"
+      @closed="closeFilter"
+      @changed-filter="changedFilter"
+    />
+
     <obd-card
       card-title="Objednávky"
       v-if="initialized"
     >
-      <!-- <div slot="controls">
+      <div slot="controls">
         <obd-button @click="openFilter">Filter</obd-button>
-      </div> -->
+      </div>
 
-      
-        <div
-          class="day-box"
-          v-for="(order, date) in orders"
-          :key="date"
-        >
-          <orders-table
-            :orders="order"
-            :date="formatDate(date, dateFormat)"
-          />
-        </div>
-      
+      <!-- TODO: month view -->
+      <div
+        class="day-box"
+        v-for="(order, date) in orders"
+        :key="date"
+      >
+        <orders-table
+          :orders="order"
+          :date="formatDate(date, dateFormat)"
+        />
+      </div>
+
     </obd-card>
   </section>
 </template>
@@ -29,11 +36,13 @@ import moment from 'moment'
 import axios from 'axios'
 import timeMixin from '../../../assets/mixins/timeMixin'
 import OrdersTable from './components/OrdersTable'
+import OrdersFilter from './components/OrdersFilter'
 
 export default {
   mixins: [timeMixin],
   components: {
     OrdersTable,
+    OrdersFilter,
   },
 
   data() {
@@ -41,7 +50,7 @@ export default {
       filterPopup: false,
       initialized: false,
       view: 'days',
-
+      filter: '',
       orders: [],
     }
   },
@@ -57,9 +66,22 @@ export default {
   },
 
   methods: {
+    openFilter() {
+      this.filterPopup = true
+    },
+    closeFilter() {
+      this.filterPopup = false
+    },
+
+    changedFilter(filter, view) {
+      this.filter = filter
+      this.view = view
+      this.loadOrders()
+    },
+
     loadOrders() {
       this.$store
-        .dispatch('orders/fetchOrders')
+        .dispatch('orders/fetchOrders', this.filter)
         .then(() => {
           this.orders = this.$store.getters['orders/getOrders']
           this.initialized = true
