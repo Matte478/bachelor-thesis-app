@@ -20,7 +20,7 @@ import ClientContractor from './views/admin/client/Contractor'
 import ClientEmployees from './views/admin/client/Employees'
 import ClientTypeOfEmployments from './views/admin/client/TypeOfEmployments'
 import ClientOrders from './views/admin/client/Orders'
-import Orders from './views/Order'
+import Orders from './views/Orders'
 
 const routes = [
   {

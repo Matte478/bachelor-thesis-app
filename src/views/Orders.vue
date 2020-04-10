@@ -50,14 +50,14 @@
                   >
                   <label :for="weekDaysEn[indexDay].toLowerCase() + '-' + indexMeal">
                     {{meal.meal}} <br />
-                    {{meal.price}}€
+                    Vaša cena: {{ meal.discount_price }}€ | Plná cena: {{meal.price}}€
                   </label>
                 </div>
               </div>
               <obd-button
                 block
                 id="submitBtn"
-              >Uložiť</obd-button>
+              > Uložiť </obd-button>
             </form>
           </obd-card>
         </div>
