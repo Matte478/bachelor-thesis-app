@@ -1,0 +1,23 @@
+.select {
+  .vs__clear,
+  .vs__open-indicator {
+    fill: $color-primary-3;
+  }
+  .vs__dropdown-toggle {
+    height: 100%;
+  }
+  .vs__dropdown-option--highlight {
+    background-color: $color-primary-3;
+    color: $color-white;
+  }
+  .vs__selected {
+    background-color: $color-primary-3;
+    color: $color-white;
+    border: none;
+    .vs__deselect {
+      svg path {
+        fill: $color-white;
+      }
+    }
+  }
+}

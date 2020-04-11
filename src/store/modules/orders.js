@@ -46,7 +46,7 @@ export default {
 
           .then(response => {
             context.commit('fetchOrders', response.data.data)
-            resolve()
+            resolve(response)
           })
           .catch(error => {
             console.log(error)

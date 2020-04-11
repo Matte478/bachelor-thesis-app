@@ -1,0 +1,86 @@
+.pop-up {
+  position: fixed;
+  display: block;
+  z-index: 150;
+  width: 90%;
+  max-width: 1000px;
+  left: 50%;
+  top: calc(50vh - 62px);
+  transform: translate(-50%, -50%);
+  visibility: visible;
+
+  &__price {
+    color: $color-primary-1;
+  }
+
+  &--filter {
+    max-width: 500px;
+    text-align: center;
+
+    .select {
+      display: inline-block;
+      margin-bottom: 1em;
+      min-width: 250px;
+    }
+    .calendar {
+      display: inline-block;
+      margin: 0 0.3em;
+      margin-bottom: 1em;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+      &:first-of-type {
+        margin-left: 0;
+      }
+      &__picker {
+        right: 0;
+      }
+
+      &__input {
+        height: 35px;
+        @include font-size(14);
+        background-color: $color-primary-3;
+        color: $color-white;
+        border: none;
+        text-align: center;
+        cursor: pointer;
+
+        &:focus {
+          outline: none;
+        }
+
+        &::placeholder {
+          color: $color-white;
+          text-align: center;
+        }
+      }
+      .vdp-datepicker__calendar {
+        .cell:not(.blank):not(.disabled).day:hover {
+          border: 1px solid $color-primary-3;
+        }
+        .cell.selected,
+        .cell.selected:hover {
+          background: $color-primary-3;
+          color: $color-white;
+        }
+      }
+    }
+    .delimer {
+      display: inline-block;
+      width: 12px;
+      height: 3px;
+      background-color: $color-primary-3;
+    }
+    .view-input {
+      display: none;
+    }
+    .view-label {
+      cursor: pointer;
+      &.active {
+        font-weight: bold;
+        color: $color-primary-3;
+      }
+    }
+  }
+}

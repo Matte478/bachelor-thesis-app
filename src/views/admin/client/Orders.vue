@@ -1,5 +1,11 @@
 <template>
   <section class="section">
+    <orders-detail
+      :active="orderDetailPopup"
+      :subtitle="modalSubtitle"
+      :order="orderDetail"
+      @closed="closeDetail"
+    />
 
     <orders-filter
       :active="filterPopup"
@@ -15,7 +21,6 @@
         <obd-button @click="openFilter">Filter</obd-button>
       </div>
 
-      <!-- TODO: month view -->
       <div
         class="day-box"
         v-for="(order, date) in orders"
@@ -23,7 +28,10 @@
       >
         <orders-table
           :orders="order"
-          :date="formatDate(date, dateFormat)"
+          :date="date"
+          :formated-date="formatDate(date, dateFormat)"
+          :view="view"
+          @detail="openDetail"
         />
       </div>
 
@@ -37,12 +45,14 @@ import axios from 'axios'
 import timeMixin from '../../../assets/mixins/timeMixin'
 import OrdersTable from './components/OrdersTable'
 import OrdersFilter from './components/OrdersFilter'
+import OrdersDetail from './components/OrdersDetail'
 
 export default {
   mixins: [timeMixin],
   components: {
     OrdersTable,
     OrdersFilter,
+    OrdersDetail,
   },
 
   data() {
@@ -52,6 +62,10 @@ export default {
       view: 'days',
       filter: '',
       orders: [],
+
+      orderDetailPopup: false,
+      modalSubtitle: '',
+      orderDetail: [],
     }
   },
 
@@ -66,6 +80,17 @@ export default {
   },
 
   methods: {
+    openDetail(id) {
+      let parsed = id.split('#')
+      console.log(this.orders[parsed[0]][parsed[1]])
+      this.orderDetail = this.orders[parsed[0]][parsed[1]]
+      this.modalSubtitle = this.formatDate(parsed[0]) + ' | ' + parsed[1]
+      this.orderDetailPopup = true
+    },
+    closeDetail() {
+      this.orderDetailPopup = false
+    },
+
     openFilter() {
       this.filterPopup = true
     },
@@ -82,8 +107,8 @@ export default {
     loadOrders() {
       this.$store
         .dispatch('orders/fetchOrders', this.filter)
-        .then(() => {
-          this.orders = this.$store.getters['orders/getOrders']
+        .then(response => {
+          this.orders = response.data.data
           this.initialized = true
         })
         .catch(e => {
@@ -96,11 +121,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.section {
-  padding-top: 20px;
-}
-
+<style lang="scss" scoped>
 .day-box {
   margin-bottom: 2.5em;
   &__date {

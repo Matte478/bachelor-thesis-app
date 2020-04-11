@@ -1,29 +1,31 @@
 <template>
   <div>
-    <h2 class="day-box__date">{{ date }}</h2>
+    <h2 class="day-box__date">{{ formatedDate }}</h2>
     <obd-table
       class="day-box__table"
-      :data="JSON.stringify(orders)"
-      :columns="JSON.stringify(columns)"
       layout="fixed"
+      :data="JSON.stringify(formatedOrders)"
+      :columns="JSON.stringify(columns)"
+      :actions="JSON.stringify(actions)"
+      @action="action"
     />
   </div>
 </template>
 
 <script>
 export default {
-  props: ['orders', 'date'],
+  props: ['orders', 'date', 'formated-date', 'view'],
 
   data() {
-    return {
-      columns: [
+    return {}
+  },
+
+  computed: {
+    columns() {
+      let columns = [
         {
           key: 'name',
           text: 'Zamestnanec',
-        },
-        {
-          key: 'meal',
-          text: 'Jedlo',
         },
         {
           key: 'discount_price',
@@ -35,7 +37,52 @@ export default {
           text: 'Plná cena',
           suffix: '€',
         },
-      ],
+      ]
+      if (this.view == 'days') {
+        columns.splice(1, 0, {
+          key: 'meal',
+          text: 'Jedlo',
+        })
+      }
+      return columns
+    },
+
+    actions() {
+      let actions = '';
+
+      if(this.view == 'months')
+        actions = [
+        {
+          text: 'Detail',
+          action: 'detail',
+          color: '#2d4059',
+        },
+      ]
+
+      return actions
+    },
+
+    formatedOrders() {
+      if (this.view == 'days') return this.orders
+
+      let formated = []
+
+      Object.keys(this.orders).map(key => {
+        formated.push({
+          id: this.date + '#' + key,
+          name: key,
+          price: this.orders[key].price,
+          discount_price: this.orders[key].discount_price,
+        })
+      })
+
+      return formated
+    },
+  },
+
+  methods: {
+    action(e) {
+      this.$emit(e.detail.action, e.detail.id)
     }
   },
 }
