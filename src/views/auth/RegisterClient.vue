@@ -1,5 +1,5 @@
 <template>
-  <section class="d-flex justify-content-center align-items-center section section--register">
+  <section class="d-flex justify-content-center align-items-center section section--full">
     <div class="container">
       <div class="row align-items-center justify-content-center">
         <div class="col-sm-10">
@@ -25,8 +25,15 @@
                         name="name"
                         id="name"
                         class="input"
-                        v-model="name"
+                        :class="{'error': hasError('name')}"
+                        v-model="form.name"
+                        @input="removeError"
                       >
+                      <div
+                        v-if="hasError('name')"
+                        class="error-message"
+                        v-cloak
+                      > {{ firstError('name') }} </div>
                     </div>
                   </div>
 
@@ -34,12 +41,19 @@
                     <label for="email">E-Mail</label>
                     <div class="input-group">
                       <input
-                        type="email"
+                        type="text"
                         name="email"
                         id="email"
                         class="input"
-                        v-model="email"
+                        :class="{'error': hasError('email')}"
+                        v-model="form.email"
+                        @input="removeError"
                       >
+                      <div
+                        v-if="hasError('email')"
+                        class="error-message"
+                        v-cloak
+                      > {{ firstError('email') }} </div>
                     </div>
                   </div>
 
@@ -51,8 +65,15 @@
                         name="password"
                         id="password"
                         class="input"
-                        v-model="password"
+                        :class="{'error': hasError('password')}"
+                        v-model="form.password"
+                        @input="removeError"
                       >
+                      <div
+                        v-if="hasError('password')"
+                        class="error-message"
+                        v-cloak
+                      > {{ firstError('password') }} </div>
                     </div>
                   </div>
 
@@ -64,7 +85,8 @@
                         name="password_confirmation"
                         id="password_confirmation"
                         class="input"
-                        v-model="password_confirmation"
+                        :class="{'error': hasError('password')}"
+                        v-model="form.password_confirmation"
                       >
                     </div>
                   </div>
@@ -82,8 +104,15 @@
                         name="company"
                         id="company"
                         class="input"
-                        v-model="company"
+                        :class="{'error': hasError('company')}"
+                        v-model="form.company"
+                        @input="removeError"
                       >
+                      <div
+                        v-if="hasError('company')"
+                        class="error-message"
+                        v-cloak
+                      > {{ firstError('company') }} </div>
                     </div>
                   </div>
 
@@ -95,8 +124,15 @@
                         name="city"
                         id="city"
                         class="input"
-                        v-model="city"
+                        :class="{'error': hasError('city')}"
+                        v-model="form.city"
+                        @input="removeError"
                       >
+                      <div
+                        v-if="hasError('city')"
+                        class="error-message"
+                        v-cloak
+                      > {{ firstError('city') }} </div>
                     </div>
                   </div>
                 </div>
@@ -106,7 +142,7 @@
                 <obd-button
                   type="submit"
                   block
-                >Registrácia</obd-button>
+                > Registrácia </obd-button>
               </div>
             </form>
           </obd-card>
@@ -117,28 +153,28 @@
 </template>
 
 <script>
+import formMixin from '../../assets/mixins/formMixin'
+
 export default {
+  name: 'registerClient',
+  mixins: [formMixin],
+  
   data() {
     return {
-      name: '',
-      email: '',
-      password: '',
-      password_confirmation: '',
-      company: '',
-      city: '',
+      form: {
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
+        company: '',
+        city: '',
+      },
     }
   },
   methods: {
     registerClient() {
       this.$store
-        .dispatch('registerClient', {
-          name: this.name,
-          email: this.email,
-          password: this.password,
-          password_confirmation: this.password_confirmation,
-          company: this.company,
-          city: this.city,
-        })
+        .dispatch('registerClient', this.form)
         .then(() => {
           this.$router.push({ name: 'login' })
           this.flashSuccess(
@@ -148,13 +184,10 @@ export default {
             },
           )
         })
+        .catch(errors => {
+          this.errors = errors
+        })
     },
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.section--register {
-  min-height: calc(100vh - 62px);
-}
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <section class="d-flex justify-content-center align-items-center section section--login">
+  <section class="d-flex justify-content-center align-items-center section section--full">
     <div class="container">
       <div class="row align-items-center justify-content-center">
         <div class="col-sm-5">
@@ -12,6 +12,11 @@
               action="#"
               @submit.prevent="login"
             >
+              <div
+                v-if="hasError('credentials')"
+                class="error-message"
+                v-cloak
+              > {{ firstError('credentials') }} </div>
               <div class="form-group">
                 <label for="email">E-Mail</label>
                 <div class="input-group">
@@ -20,8 +25,15 @@
                     name="email"
                     id="email"
                     class="input"
-                    v-model="email"
+                    :class="{'error': hasError('email')}"
+                    v-model="form.email"
+                    @input="removeError"
                   >
+                  <div
+                    v-if="hasError('email')"
+                    class="error-message"
+                    v-cloak
+                  > {{ firstError('email') }} </div>
                 </div>
               </div>
 
@@ -33,8 +45,15 @@
                     name="password"
                     id="password"
                     class="input"
-                    v-model="password"
+                    :class="{'error': hasError('password')}"
+                    v-model="form.password"
+                    @input="removeError"
                   >
+                  <div
+                    v-if="hasError('password')"
+                    class="error-message"
+                    v-cloak
+                  > {{ firstError('password') }} </div>
                 </div>
               </div>
 
@@ -54,26 +73,32 @@
 </template>
 
 <script>
+import formMixin from '../../assets/mixins/formMixin'
+
 export default {
   name: 'login',
+  mixins: [formMixin],
+
   data() {
     return {
-      email: '',
-      password: '',
+      form: {
+        email: '',
+        password: '',
+      },
     }
   },
   methods: {
     login() {
       this.$store
-        .dispatch('retrieveToken', {
-          email: this.email,
-          password: this.password,
-        })
+        .dispatch('retrieveToken', this.form)
         .then(() => {
           this.$router.push({ name: 'admin' })
           this.flashSuccess('Boli ste úspešne prihlásený.', {
             timeout: 3000,
           })
+        })
+        .catch(errors => {
+          this.errors = errors
         })
     },
   },
@@ -81,52 +106,5 @@ export default {
 </script>
 
 <style lang="scss">
-.section--login {
-  min-height: calc(100vh - 62px);
-}
 
-.form-group {
-  margin-bottom: 1.7em;
-
-  label,
-  .desc {
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-
-  .desc {
-    position: relative;
-    display: inline-block;
-    @include font-size(16);
-
-    &:after {
-      @include pseudo();
-      bottom: 0;
-      height: 1px;
-      width: 50%;
-      background-color: $color-primary-1;
-    }
-  }
-
-  .input-group {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
-    width: 100%;
-
-    .input {
-      width: 100%;
-      border: 1px solid $color-border;
-      border-radius: 4px;
-      padding: 1rem 0.75rem;
-      height: 35px;
-
-      &:focus {
-        border: 1px solid $color-primary-1;
-        outline: none;
-      }
-    }
-  }
-}
 </style>

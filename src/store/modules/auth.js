@@ -37,10 +37,7 @@ export default {
   actions: {
     retrieveToken(context, credentials) {
       return new Promise((resolve, reject) => {
-        axios.post('/login', {
-          email: credentials.email,
-          password: credentials.password,
-        })
+        axios.post('/login', credentials)
           .then(response => {
             const token = response.data.success.token
             const tokenType = response.data.success.token_type
@@ -58,8 +55,7 @@ export default {
             resolve(response)
           })
           .catch(error => {
-            console.log(error)
-            reject(error)
+            reject(error.response.data.errors)
           })
       })
     },
@@ -87,39 +83,26 @@ export default {
         })
       }
     },
-    registerContractor(context, data) {
+    registerContractor(context, form) {
       return new Promise((resolve, reject) => {
-        axios.post('/registerContractor', {
-          name: data.name,
-          email: data.email,
-          password: data.password,
-          password_confirmation: data.password_confirmation,
-          restaurant: data.restaurant,
-          city: data.city,
-        })
+        axios.post('/registerContractor', form)
           .then(response => {
             resolve(response)
           })
           .catch(error => {
-            reject(error)
+            reject(error.response.data.errors)
           })
       })
     },
-    registerClient(context, data) {
+    registerClient(context, form) {
       return new Promise((resolve, reject) => {
-        axios.post('/registerClient', {
-          name: data.name,
-          email: data.email,
-          password: data.password,
-          password_confirmation: data.password_confirmation,
-          company: data.company,
-          city: data.city,
-        })
+        axios.post('/registerClient', form)
           .then(response => {
+            console.log(response)
             resolve(response)
           })
           .catch(error => {
-            reject(error)
+            reject(error.response.data.errors)
           })
       })
     }
