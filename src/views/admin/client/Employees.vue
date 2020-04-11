@@ -4,7 +4,6 @@
       :active="newEmployeePopup"
       @closed="closePopup"
       @added-employee="addedEmployee"
-      @error="closePopup"
     />
 
     <employees-edit
@@ -80,8 +79,8 @@ export default {
       this.editEmployeePopup = false
     },
 
-    addedEmployee() {
-      this.loadEmployees()
+    addedEmployee(employee) {
+      this.employees.push(employee);
       this.closePopup()
     },
 

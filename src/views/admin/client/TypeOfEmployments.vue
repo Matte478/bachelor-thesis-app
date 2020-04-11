@@ -4,7 +4,6 @@
       :active="newTypePopup"
       @closed="closePopup"
       @added-new-type="addedNewType"
-      @error="closePopup"
     />
 
     <type-of-employments-edit
@@ -68,8 +67,8 @@ export default {
       this.editTypePopup = true
     },
 
-    addedNewType() {
-      this.loadTypeOfEmployments()
+    addedNewType(type) {
+      this.typeOfEmployments.push(type)
       this.closePopup()
     },
 

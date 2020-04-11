@@ -29,11 +29,10 @@ export default {
         axios.get('/type-of-employments/' + typeId)
           .then(response => {
             context.commit('fetchTypeOfEmployments', response.data.data)
-            resolve()
+            resolve(response.data.data)
           })
           .catch(error => {
-            console.log(error)
-            reject(error)
+            reject(error.response.data.errors)
           })
       })
     },
@@ -48,11 +47,10 @@ export default {
           contribution: type.contribution
         })
           .then(response => {
-            resolve(response)
+            resolve(response.data.data)
           })
           .catch(error => {
-            console.log(error)
-            reject(error)
+            reject(error.response.data.errors)
           })
       })
     },
@@ -66,11 +64,10 @@ export default {
           contribution: type.contribution
         })
           .then(response => {
-            resolve(response)
+            resolve(response.data.data)
           })
           .catch(error => {
-            console.log(error)
-            reject(error)
+            reject(error.response.data.errors)
           })
       })
     },
@@ -81,11 +78,10 @@ export default {
       return new Promise((resolve, reject) => {
         axios.delete('/type-of-employments/' + typeId)
           .then(response => {
-            resolve(response)
+            resolve(response.data.data)
           })
           .catch(error => {
-            console.log(error)
-            reject(error)
+            reject(error.response.data.errors)
           })
       })
     }

@@ -19,8 +19,14 @@
             name="meal"
             id="meal"
             class="input"
+            :class="{'error': hasError('meal')}"
             v-model="newMeal.meal"
+            @input="removeError"
           >
+          <div
+            v-if="hasError('meal')"
+            class="error-message"
+          > {{ firstError('meal') }} </div>
         </div>
       </div>
 
@@ -33,8 +39,14 @@
             name="price"
             id="price"
             class="input"
+            :class="{'error': hasError('price')}"
             v-model="newMeal.price"
+            @input="removeError"
           >
+          <div
+            v-if="hasError('price')"
+            class="error-message"
+          > {{ firstError('price') }} </div>
         </div>
       </div>
 
@@ -42,7 +54,7 @@
         <obd-button
           type="submit"
           block
-        >Pridať jedlo</obd-button>
+        > Pridať jedlo </obd-button>
       </div>
     </form>
   </obd-modal>
@@ -50,13 +62,22 @@
 
 <script>
 import axios from 'axios'
+import formMixin from '../../../../assets/mixins/formMixin'
 
 export default {
+  name: 'MenuAddNew',
   props: ['active'],
+  mixins: [formMixin],
 
   data() {
     return {
       newMeal: {},
+    }
+  },
+
+  watch: {
+    active() {
+      this.errors = {}
     }
   },
 
@@ -77,11 +98,7 @@ export default {
           this.$emit('added-meal', response.data.data)
         })
         .catch(error => {
-          console.log(error)
-          this.flashError('Niečo sa pokazilo, skúste to znova.', {
-            timeout: 3000,
-          })
-          this.$emit('error')
+          this.errors = error.response.data.errors
         })
     },
 

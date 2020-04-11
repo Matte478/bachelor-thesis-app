@@ -19,8 +19,14 @@
             name="name"
             id="name"
             class="input"
+            :class="{'error': hasError('name')}"
             v-model="editableType.name"
+            @input="removeError"
           />
+          <div
+            v-if="hasError('name')"
+            class="error-message"
+          > {{ firstError('name') }} </div>
         </div>
       </div>
 
@@ -33,8 +39,14 @@
             name="contribution"
             id="contribution"
             class="input"
+            :class="{'error': hasError('contribution')}"
             v-model="editableType.contribution"
+            @input="removeError"
           />
+          <div
+            v-if="hasError('contribution')"
+            class="error-message"
+          > {{ firstError('contribution') }} </div>
         </div>
       </div>
 
@@ -42,15 +54,19 @@
         <obd-button
           type="submit"
           block
-        >Upraviť jedlo</obd-button>
+        > Upraviť pracovný pomer </obd-button>
       </div>
     </form>
   </obd-modal>
 </template>
 
 <script>
+import formMixin from '../../../../assets/mixins/formMixin'
+
 export default {
+  name: 'TypeOfEmployeementsAddNew',
   props: ['active', 'typeId'],
+  mixins: [formMixin],
 
   data() {
     return {
@@ -59,6 +75,9 @@ export default {
   },
 
   watch: {
+    active() {
+      this.errors = {}
+    },
     typeId() {
       this.loadType()
     },
@@ -91,11 +110,8 @@ export default {
           })
           this.$emit('edited-type')
         })
-        .catch(e => {
-          this.flashError(
-            'Niečo sa pokazilo, nebolo možné upraviť pracovný pomer.',
-          )
-          this.$emit('error')
+        .catch(errors => {
+          this.errors = errors
         })
     },
   },

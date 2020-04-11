@@ -18,20 +18,32 @@
             name="name"
             id="name"
             class="input"
+            :class="{'error': hasError('name')}"
             v-model="newEmployee.name"
+            @input="removeError"
           />
+          <div
+            v-if="hasError('name')"
+            class="error-message"
+          > {{ firstError('name') }} </div>
         </div>
       </div>
       <div class="form-group">
         <label for="meal">Email</label>
         <div class="input-group">
           <input
-            type="email"
+            type="text"
             name="email"
             id="email"
             class="input"
+            :class="{'error': hasError('email')}"
             v-model="newEmployee.email"
+            @input="removeError"
           />
+          <div
+            v-if="hasError('email')"
+            class="error-message"
+          > {{ firstError('email') }} </div>
         </div>
       </div>
       <div class="form-group">
@@ -42,8 +54,14 @@
             name="password"
             id="password"
             class="input"
+            :class="{'error': hasError('password')}"
             v-model="newEmployee.password"
+            @input="removeError"
           />
+          <div
+            v-if="hasError('password')"
+            class="error-message"
+          > {{ firstError('password') }} </div>
         </div>
       </div>
       <div class="form-group">
@@ -54,6 +72,7 @@
             name="password_confirmation"
             id="password-confirmation"
             class="input"
+            :class="{'error': hasError('password')}"
             v-model="newEmployee.password_confirmation"
           />
         </div>
@@ -83,8 +102,12 @@
 </template>
 
 <script>
+import formMixin from '../../../../assets/mixins/formMixin'
+
 export default {
+  name: 'EmployeesAddNew',
   props: ['active'],
+  mixins: [formMixin],
 
   data() {
     return {
@@ -116,18 +139,14 @@ export default {
     addEmployee() {
       this.$store
         .dispatch('employees/submitEmployee', this.newEmployee)
-        .then(() => {
-          this.flashSuccess('Nový pracovný pomer bol úspešne pridaný.', {
+        .then(response => {
+          this.flashSuccess('Nový zamestnanec bol úspešne pridaný.', {
             timeout: 3000,
           })
-          this.$emit('added-employee')
+          this.$emit('added-employee', response)
         })
-        .catch(e => {
-          console.log('error v komponente', e)
-          this.flashError(
-            'Niečo sa pokazilo, nebolo možné pridať nový pracovný pomer.',
-          )
-          this.$emit('error')
+        .catch(errors => {
+          this.errors = errors
         })
     },
 

@@ -19,8 +19,14 @@
             name="meal"
             id="meal"
             class="input"
+            :class="{'error': hasError('meal')}"
             v-model="editableMeal.meal"
+            @input="removeError"
           >
+          <div
+            v-if="hasError('meal')"
+            class="error-message"
+          > {{ firstError('meal') }} </div>
         </div>
       </div>
 
@@ -33,8 +39,14 @@
             name="price"
             id="price"
             class="input"
+            :class="{'error': hasError('price')}"
             v-model="editableMeal.price"
+            @input="removeError"
           >
+          <div
+            v-if="hasError('price')"
+            class="error-message"
+          > {{ firstError('price') }} </div>
         </div>
       </div>
 
@@ -50,9 +62,12 @@
 
 <script>
 import axios from 'axios'
+import formMixin from '../../../../assets/mixins/formMixin'
 
 export default {
+  name: 'MenuEdit',
   props: ['active', 'mealId'],
+  mixins: [formMixin],
 
   data() {
     return {
@@ -62,6 +77,7 @@ export default {
 
   watch: {
     mealId() {
+      this.errors = {}
       this.loadMeal()
     },
   },
@@ -95,26 +111,14 @@ export default {
       axios
         .put('/meals/' + mealId, this.editableMeal)
         .then(() => {
-          this.$store.dispatch('fetchMeals').catch(e => {
-            this.flashError(
-              'Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.',
-            )
-          })
-
+          this.$store.dispatch('fetchMeals')
           this.flashSuccess('Jedlo bolo úspešne upravené.', {
             timeout: 3000,
           })
           this.$emit('edited-meal')
         })
         .catch(error => {
-          console.log(error)
-          this.flashError(
-            'Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.',
-            {
-              timeout: 3000,
-            },
-          )
-          this.$emit('error')
+          this.errors = error.response.data.errors
         })
     },
   },

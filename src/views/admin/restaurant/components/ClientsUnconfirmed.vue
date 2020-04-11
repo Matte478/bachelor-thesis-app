@@ -1,8 +1,9 @@
 <template>
   <div>
-    <h2>Čakajúce na schválenie</h2>
+    <h2 class="title">Čakajúce na schválenie</h2>
     <obd-table
       v-if="clients.length"
+      class="table"
       layout="fixed"
       :data="JSON.stringify(clients)"
       :columns="JSON.stringify(columns)"
@@ -46,3 +47,12 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.title {
+  margin-bottom: 0.3em;
+}
+.table {
+  margin-bottom: 1.5em;
+}
+</style>

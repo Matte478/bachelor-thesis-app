@@ -1,8 +1,9 @@
 <template>
   <div>
-    <h2>Schválené spolupráce</h2>
+    <h2 class="title">Schválené spolupráce</h2>
     <obd-table
       v-if="clients.length"
+      class="table"
       layout="fixed"
       :data="JSON.stringify(clients)"
       :columns="JSON.stringify(columns)"
@@ -26,12 +27,14 @@ export default {
           key: 'city',
           text: 'Mesto',
         },
-        // {
-        //   key: '',
-        //   text: '',
-        // }
       ],
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.title {
+  margin-bottom: 0.3em;
+}
+</style>

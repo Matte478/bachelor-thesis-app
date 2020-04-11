@@ -29,11 +29,10 @@ export default {
         axios.get('/employees/' + employeeId)
           .then(response => {
             context.commit('fetchEmployees', response.data.data)
-            resolve(response)
+            resolve(response.data.data)
           })
           .catch(error => {
-            console.log(error)
-            reject(error)
+            reject(error.response.data.errors)
           })
       })
     },
@@ -44,11 +43,10 @@ export default {
       return new Promise((resolve, reject) => {
         axios.post('/employees', employee)
           .then(response => {
-            resolve(response)
+            resolve(response.data.data)
           })
           .catch(error => {
-            console.log(error)
-            reject(error)
+            reject(error.response.data.errors)
           })
       })
     },
@@ -59,11 +57,10 @@ export default {
       return new Promise((resolve, reject) => {
         axios.put('/employees/' + employee.id, employee)
           .then(response => {
-            resolve(response)
+            resolve(response.data.data)
           })
           .catch(error => {
-            console.log(error)
-            reject(error)
+            reject(error.response.data.errors)
           })
       })
     },
@@ -74,11 +71,10 @@ export default {
       return new Promise((resolve, reject) => {
         axios.delete('/employees/' + employeeId)
           .then(response => {
-            resolve(response)
+            resolve(response.data.data)
           })
           .catch(error => {
-            console.log(error)
-            reject(error)
+            reject(error.response.data.errors)
           })
       })
     },

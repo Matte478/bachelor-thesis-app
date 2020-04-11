@@ -19,8 +19,14 @@
             name="name"
             id="name"
             class="input"
+            :class="{'error': hasError('name')}"
             v-model="newType.name"
+            @input="removeError"
           />
+          <div
+            v-if="hasError('name')"
+            class="error-message"
+          > {{ firstError('name') }} </div>
         </div>
       </div>
 
@@ -33,8 +39,14 @@
             name="contribution"
             id="contribution"
             class="input"
+            :class="{'error': hasError('contribution')}"
             v-model="newType.contribution"
+            @input="removeError"
           />
+          <div
+            v-if="hasError('contribution')"
+            class="error-message"
+          > {{ firstError('contribution') }} </div>
         </div>
       </div>
       <div class="form-group">
@@ -48,8 +60,12 @@
 </template>
 
 <script>
+import formMixin from '../../../../assets/mixins/formMixin'
+
 export default {
+  name: 'TypeOfEmployeementsAddNew',
   props: ['active'],
+  mixins: [formMixin],
 
   data() {
     return {
@@ -65,20 +81,17 @@ export default {
     addType() {
       this.$store
         .dispatch('typeOfEmployments/submitTypeOfEmployment', this.newType)
-        .then(() => {
+        .then(response => {
           this.newType = {}
           this.flashSuccess('Nový pracovný pomer bol úspešne pridaný.', {
             timeout: 3000,
           })
-          this.$emit('added-new-type')
+          this.$emit('added-new-type', response)
         })
-        .catch(e => {
-          this.flashError(
-            'Niečo sa pokazilo, nebolo možné pridať nový pracovný pomer.',
-          )
-          this.$emit('error')
+        .catch(errors => {
+          this.errors = errors
         })
     },
-  }
+  },
 }
 </script>

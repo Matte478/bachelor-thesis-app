@@ -1,11 +1,12 @@
 <template>
   <section class="d-flex justify-content-center align-items-center section section--full">
     <div class="container">
-      <div class="row align-items-center justify-content-center">
-        <div class="col-sm-5">
+      <div class="row">
+        <div class="col">
           <obd-card
             card-title="Prihlásenie"
             card-subtitle="Prihlásenie do účtu"
+            class="login"
           >
             <form
               class="form"
@@ -105,6 +106,9 @@ export default {
 }
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+.login {
+  max-width: 400px;
+  margin: 0 auto;
+}
 </style>

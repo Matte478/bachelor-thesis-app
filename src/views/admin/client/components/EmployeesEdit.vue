@@ -18,8 +18,14 @@
             name="name"
             id="name"
             class="input"
+            :class="{'error': hasError('name')}"
             v-model="employee.name"
+            @input="removeError"
           />
+          <div
+            v-if="hasError('name')"
+            class="error-message"
+          > {{ firstError('name') }} </div>
         </div>
       </div>
       <div class="form-group">
@@ -30,8 +36,14 @@
             name="email"
             id="email"
             class="input"
+            :class="{'error': hasError('email')}"
             v-model="employee.email"
+            @input="removeError"
           />
+          <div
+            v-if="hasError('email')"
+            class="error-message"
+          > {{ firstError('email') }} </div>
         </div>
       </div>
       <div class="form-group">
@@ -42,8 +54,15 @@
             name="password"
             id="password"
             class="input"
+            :class="{'error': hasError('password')}"
             v-model="employee.password"
+            @input="removeError"
           />
+          <div
+            v-if="hasError('password')"
+            class="error-message"
+            :class="{'error': hasError('password')}"
+          > {{ firstError('password') }} </div>
         </div>
       </div>
       <div class="form-group">
@@ -54,6 +73,7 @@
             name="password_confirmation"
             id="password-confirmation"
             class="input"
+            :class="{'error': hasError('password')}"
             v-model="employee.password_confirmation"
           />
         </div>
@@ -76,15 +96,19 @@
         <obd-button
           type="submit"
           block
-        >Upraviť zamestnanca</obd-button>
+        > Upraviť zamestnanca </obd-button>
       </div>
     </form>
   </obd-modal>
 </template>
 
 <script>
+import formMixin from '../../../../assets/mixins/formMixin'
+
 export default {
+  name: 'EmployeesEdit',
   props: ['active', 'employeeId'],
+  mixins: [formMixin],
 
   data() {
     return {
@@ -95,8 +119,8 @@ export default {
 
   watch: {
     employeeId() {
-      if(this.employeeId == '') return
-    
+      if (this.employeeId == '') return
+      this.errors = {}
       this.loadEmployee()
     },
   },
@@ -143,11 +167,8 @@ export default {
           })
           this.$emit('edited-employee')
         })
-        .catch(e => {
-          this.flashError(
-            'Niečo sa pokazilo, nebolo možné upraviť zamestnanca.',
-          )
-          this.$emit('error')
+        .catch(errors => {
+          this.errors = errors
         })
     },
 

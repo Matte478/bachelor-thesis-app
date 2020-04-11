@@ -27,14 +27,8 @@
           <li>
             <router-link :to="{ name: 'restaurant-menu' }"><i class="fas fa-utensils"></i> Menu</router-link>
           </li>
-          <!-- <li>
-                    <router-link :to="{ name: 'restaurant-week-offer' }"><i class="fas fa-calendar-week"></i> Týždenná ponuka</router-link>
-                </li> -->
           <li>
             <router-link :to="{ name: 'restaurant-clients' }"><i class="fas fa-calendar-week"></i> Klienti</router-link>
-          </li>
-          <li>
-            <a href="#"><i class="fas fa-users"></i> Zamestnanci</a>
           </li>
         </ul>
 

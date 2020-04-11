@@ -46,11 +46,10 @@ export default {
 
           .then(response => {
             context.commit('fetchOrders', response.data.data)
-            resolve(response)
+            resolve(response.data.data)
           })
           .catch(error => {
-            console.log(error)
-            reject(error)
+            reject(error.response.data.errors)
           })
       })
     },
@@ -66,11 +65,10 @@ export default {
 
           .then(response => {
             context.commit('fetchOrders', response.data.data)
-            resolve()
+            resolve(response.data.data)
           })
           .catch(error => {
-            console.log(error)
-            reject(error)
+            reject(error.response.data.errors)
           })
       })
     },
@@ -83,11 +81,10 @@ export default {
           orders: orders
         })
           .then(response => {
-            resolve(response)
+            resolve(response.data.data)
           })
           .catch(error => {
-            console.log(error)
-            reject(error)
+            reject(error.response.data.errors)
           })
       })
     }
