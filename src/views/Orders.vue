@@ -54,7 +54,7 @@
                   >
                   <label :for="weekDaysEn[indexDay].toLowerCase() + '-' + indexMeal">
                     {{meal.meal}} <br />
-                    Vaša cena: {{ meal.discount_price }}€ | Plná cena: {{meal.price}}€
+                    Vaša cena: {{ weekOrders[indexDay].discount_price || meal.discount_price }}€ | Plná cena: {{meal.price}}€
                   </label>
                 </div>
               </div>
@@ -91,7 +91,12 @@ export default {
   },
 
   created() {
-    this.$store.dispatch('fetchMeals').catch(e => {
+    this.loadOrders()
+  },
+
+  methods: {
+    loadOrders() {
+      this.$store.dispatch('fetchMeals').catch(e => {
       if (e.response.status == 401)
         this.errorMessage = 'Nemáte žiadneho dodávateľa jedál'
       else
@@ -116,8 +121,8 @@ export default {
           'Niečo sa pokazilo, nebolo možné načítať objednávky.<br>Skúste obnoviť stránku.',
         )
       })
-  },
-  methods: {
+    },
+
     // this method add empty order to weekOrder,
     // because order form needs order item for every day
     formatWeekOrders() {
@@ -140,6 +145,7 @@ export default {
       this.$store
         .dispatch('orders/submitOrder', this.weekOrders)
         .then(response => {
+          this.loadOrders()
           this.flashSuccess('Obedy boli uložené.', {
             timeout: 3000,
           })

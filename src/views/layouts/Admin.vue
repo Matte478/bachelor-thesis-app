@@ -34,7 +34,7 @@
 
         <ul
           class="sidebar__menu"
-          v-if="userType == 'client'"
+          v-if="client"
         >
           <li>
             <router-link :to="{ name: 'client-contractor' }"><i class="fas fa-tachometer-alt"></i> Dodávateľ</router-link>
@@ -46,7 +46,7 @@
             <router-link :to="{ name: 'client-employees' }"><i class="fas fa-users"></i> Zamestnanci</router-link>
           </li>
           <li>
-            <router-link :to="{ name: 'client-type-of-employments' }"><i class="fas fa-users"></i> Pracovné pomery</router-link>
+            <router-link :to="{ name: 'client-type-of-employments' }"><i class="fas fa-money-bill-wave-alt"></i> Pracovné pomery</router-link>
           </li>
         </ul>
       </nav>
@@ -74,13 +74,11 @@ export default {
       return this.$store.getters.userType
     },
     contractor() {
-      const userRoles = this.$store.getters.userRoles
-      return userRoles.includes('Contractor')
+      return this.$store.getters.loggedInContractor
     },
     client() {
-      const userRoles = this.$store.getters.userRoles
-      return userRoles.includes('Client')
-    }
+      return this.$store.getters.loggedInClient
+    },
   },
   methods: {
     toggleClose: function() {

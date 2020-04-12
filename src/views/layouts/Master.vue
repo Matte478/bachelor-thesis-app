@@ -7,7 +7,7 @@
           class="logo"
         >Obedovač</router-link>
         <ul>
-          <li v-if="loggedIn && (userType == 'client')">
+          <li v-if="client || employee">
             <router-link
               :to="{ name: 'orders' }"
               exact
@@ -63,8 +63,11 @@ export default {
     loggedIn() {
       return this.$store.getters.loggedIn
     },
-    userType() {
-      return this.$store.getters.userType
+    employee() {
+      return this.$store.getters.loggedInEmployee
+    },
+    client() {
+      return this.$store.getters.loggedInClient
     },
   },
 }

@@ -15,10 +15,6 @@ export default {
     return {
       columns: [
         {
-          key: 'id',
-          text: 'ID',
-        },
-        {
           key: 'name',
           text: 'Meno',
         },
