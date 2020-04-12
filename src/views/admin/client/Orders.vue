@@ -17,23 +17,30 @@
       card-title="Objednávky"
       v-if="initialized"
     >
-      <div slot="controls">
+
+      <div
+        slot="controls"
+        v-if="notEmptyObject(orders)"
+      >
         <obd-button @click="openFilter">Filter</obd-button>
       </div>
 
-      <div
-        class="day-box"
-        v-for="(order, date) in orders"
-        :key="date"
-      >
-        <orders-table
-          :orders="order"
-          :date="date"
-          :formated-date="formatDate(date, dateFormat)"
-          :view="view"
-          @detail="openDetail"
-        />
+      <div v-if="notEmptyObject(orders)">
+        <div
+          class="day-box"
+          v-for="(order, date) in orders"
+          :key="date"
+        >
+          <orders-table
+            :orders="order"
+            :date="date"
+            :formated-date="formatDate(date, dateFormat)"
+            :view="view"
+            @detail="openDetail"
+          />
+        </div>
       </div>
+      <h3 v-else> Nemáte žiadne objednávky </h3>
 
     </obd-card>
   </section>
@@ -108,10 +115,12 @@ export default {
       this.$store
         .dispatch('orders/fetchOrders', this.filter)
         .then(response => {
-          this.orders = response.data.data
+          this.orders = response
           this.initialized = true
+          // console.log(this.notEmptyObject(response))
         })
         .catch(e => {
+          console.log(e)
           this.flashError(
             'Niečo sa pokazilo, nebolo možné načítať objednávky.<br>Skúste obnoviť stránku.',
           )

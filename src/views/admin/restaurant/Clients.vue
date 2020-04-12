@@ -6,6 +6,7 @@
     >
 
       <clients-unconfirmed
+        class="unconfirmed"
         :clients="unconfirmedClients"
         @confirm="confirmAgreement"
       />
@@ -122,14 +123,8 @@ export default {
 
 <style lang="scss" scoped>
 obd-card {
-  h2 {
-    margin-bottom: 0.5em;
+  .unconfirmed {
+    margin-bottom: 2em;
   }
-  h3 {
-    margin: 1em 0 3em;
-  }
-}
-obd-table {
-  margin-bottom: 3em;
 }
 </style>

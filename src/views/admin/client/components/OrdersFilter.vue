@@ -138,7 +138,7 @@ export default {
       this.$store
         .dispatch('employees/fetchEmployees')
         .then(response => {
-          let employees = response.data.data
+          let employees = response
           employees.forEach(employee => {
             this.employees.push(employee.name)
           })

@@ -87,14 +87,12 @@ export default {
         this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token
 
       axios
-        .post('/meals', {
-          meal: this.newMeal.meal,
-          price: this.newMeal.price,
-        })
+        .post('/meals', this.newMeal)
         .then(response => {
           this.flashSuccess('Jedlo bolo úspešne pridané.', {
             timeout: 3000,
           })
+          this.newMeal = {},
           this.$emit('added-meal', response.data.data)
         })
         .catch(error => {

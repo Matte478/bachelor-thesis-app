@@ -14,8 +14,6 @@ import 'bootstrap/dist/css/bootstrap-grid.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 require('vue-flash-message/dist/vue-flash-message.min.css')
 
-// import $ from "jquery";
-
 Vue.config.productionTip = false
 
 // Tell Vue to ignore all components defined in the test-components
@@ -63,6 +61,14 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     next() // make sure to always call next()!
+  }
+})
+
+Vue.mixin({
+  methods: {
+    notEmptyObject(object) {
+      return Object.keys(object).length
+    },
   }
 })
 

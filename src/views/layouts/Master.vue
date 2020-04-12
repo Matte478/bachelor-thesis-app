@@ -7,12 +7,6 @@
           class="logo"
         >Obedovač</router-link>
         <ul>
-          <li>
-            <router-link
-              :to="{ name: 'home' }"
-              exact
-            >Domov</router-link>
-          </li>
           <li v-if="loggedIn && (userType == 'client')">
             <router-link
               :to="{ name: 'orders' }"

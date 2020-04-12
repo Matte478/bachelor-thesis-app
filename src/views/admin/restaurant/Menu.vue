@@ -3,7 +3,6 @@
     <menu-add-new
       :active="newMealPopup"
       @closed="closePopup"
-      @error="closePopup"
       @added-meal="addedMeal"
     />
 
@@ -11,7 +10,6 @@
       :active="editMealPopup"
       :mealId="editableId"
       @closed="closeEditPopup"
-      @error="closeEditPopup"
       @edited-meal="editedMeal"
     />
 

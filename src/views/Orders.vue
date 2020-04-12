@@ -9,7 +9,10 @@
             :card-subtitle="getWeekRange('DD.MM.YYYY')"
             v-cloak
           >
-            <div slot="controls">
+            <div
+              slot="controls"
+              v-if="!errorMessage"
+            >
               <obd-scroll
                 v-for="(day, index) in weekDays"
                 :key="index"
@@ -20,6 +23,7 @@
             <form
               action="#"
               @submit.prevent="submitOrder"
+              v-if="!errorMessage"
             >
               <div
                 v-for="(date, indexDay) in getCurrentWeek"
@@ -59,6 +63,7 @@
                 id="submitBtn"
               > Uložiť </obd-button>
             </form>
+            <h3 v-else>{{ errorMessage }}</h3>
           </obd-card>
         </div>
       </div>
@@ -75,6 +80,7 @@ export default {
   data() {
     return {
       weekOrders: [],
+      errorMessage: '',
     }
   },
 
@@ -86,9 +92,12 @@ export default {
 
   created() {
     this.$store.dispatch('fetchMeals').catch(e => {
-      this.flashError(
-        'Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.',
-      )
+      if (e.response.status == 401)
+        this.errorMessage = 'Nemáte žiadneho dodávateľa jedál'
+      else
+        this.flashError(
+          'Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.',
+        )
     })
 
     let filter =

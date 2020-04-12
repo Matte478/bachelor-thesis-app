@@ -21,7 +21,7 @@
         <obd-button @click="openFilter">Filter</obd-button>
       </div>
 
-      <div>
+      <div v-if="notEmptyObject(orders)">
         <div
           class="day-box"
           v-for="(order, date) in orders"
@@ -35,6 +35,7 @@
           />
         </div>
       </div>
+      <h3 v-else> Nemáte žiadne objednávky </h3>
     </obd-card>
   </section>
 </template>
@@ -136,5 +137,4 @@ export default {
     color: $color-primary-1;
   }
 }
-
 </style>

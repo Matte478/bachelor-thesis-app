@@ -1,5 +1,4 @@
 // general
-import Home from './views/Home'
 import Login from './views/auth/Login'
 import RegisterContractor from './views/auth/RegisterContractor'
 import RegisterClient from './views/auth/RegisterClient'
@@ -23,11 +22,6 @@ import ClientOrders from './views/admin/client/Orders'
 import Orders from './views/Orders'
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: Home,
-  },
   {
     path: '/login',
     name: 'login',
