@@ -23,6 +23,12 @@ import Orders from './views/Orders'
 
 const routes = [
   {
+    path: '/',
+    redirect: { 
+      name: 'admin'
+    }
+  },
+  {
     path: '/login',
     name: 'login',
     component: Login,
@@ -47,17 +53,19 @@ const routes = [
       requiresVisitor: true,
     }
   },
+
   {
     path: '/logout',
     name: 'logout',
     component: Logout,
   },
+
   {
     path: '/orders',
     name: 'orders',
     component: Orders,
     meta: {
-      requiresAuth: true,
+      requiresClientOrEmployee: true,
     },
   },
   {
@@ -73,48 +81,73 @@ const routes = [
         path: 'dashboard',
         name: 'restaurant-dashboard',
         component: RestaurantDashboard,
+        meta: {
+          requiresContractor: true,
+        },
       },
       {
         path: 'menu',
         name: 'restaurant-menu',
         component: RestaurantMenu,
+        meta: {
+          requiresContractor: true,
+        },
       },
       {
         path: 'clients',
         name: 'restaurant-clients',
         component: RestaurantClients,
+        meta: {
+          requiresContractor: true,
+        },
       },
       {
         path: 'orders',
         name: 'restaurant-orders',
         component: RestaurantOrders,
+        meta: {
+          requiresContractor: true,
+        },
       },
 
       {
         path: 'contractor',
         name: 'client-contractor',
         component: ClientContractor,
+        meta: {
+          requiresClient: true,
+        },
       },
       {
         path: 'employee-orders',
         name: 'client-orders',
         component: ClientOrders,
+        meta: {
+          requiresClient: true,
+        },
       },
       {
         path: 'employees',
         name: 'client-employees',
         component: ClientEmployees,
+        meta: {
+          requiresClient: true,
+        },
       },
       {
         path: 'type-of-employments',
         name: 'client-type-of-employments',
         component: ClientTypeOfEmployments,
+        meta: {
+          requiresClient: true,
+        },
       },
     ]
   },
 
   {
     path: "*",
+    name: 'page-not-found',
     component: PageNotFound
   }
 ]

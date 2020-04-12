@@ -16,7 +16,7 @@
         </button>
         <ul
           class="sidebar__menu"
-          v-if="userType == 'contractor'"
+          v-if="contractor"
         >
           <li>
             <router-link :to="{ name: 'restaurant-dashboard' }"><i class="fas fa-tachometer-alt"></i> Dashboard</router-link>
@@ -73,6 +73,14 @@ export default {
     userType() {
       return this.$store.getters.userType
     },
+    contractor() {
+      const userRoles = this.$store.getters.userRoles
+      return userRoles.includes('Contractor')
+    },
+    client() {
+      const userRoles = this.$store.getters.userRoles
+      return userRoles.includes('Client')
+    }
   },
   methods: {
     toggleClose: function() {

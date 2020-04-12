@@ -4,15 +4,24 @@ export default {
   state: {
     token: localStorage.getItem('token') || null,
     tokenType: localStorage.getItem('token_type') || null,
-    userType: localStorage.getItem('user_type') || null,
+    userRoles: localStorage.getItem('user_roles') || [],
   },
 
   getters: {
     loggedIn(state) {
       return state.token !== null
     },
-    userType(state) {
-      return state.userType
+    userRoles(state) {
+      return state.userRoles
+    },
+    loggedInClient(state) {
+      return state.userRoles.includes('Client')
+    },
+    loggedInEmployee(state) {
+      return state.userRoles.includes('Employee')
+    },
+    loggedInContractor(state) {
+      return state.userRoles.includes('Contractor')
     },
   },
 
@@ -23,8 +32,8 @@ export default {
     retrieveTokenType(state, tokenType) {
       state.tokenType = tokenType
     },
-    retrieveUserType(state, userType) {
-      state.userType = userType
+    retrieveUserRoles(state, userRoles) {
+      state.userRoles = userRoles
     },
     destroyToken(state) {
       state.token = null
@@ -41,7 +50,7 @@ export default {
           .then(response => {
             const token = response.data.success.token
             const tokenType = response.data.success.token_type
-            const userType = response.data.success.user.type
+            const userRoles = response.data.success.roles
 
             localStorage.setItem('token', token)
             context.commit('retrieveToken', token)
@@ -49,8 +58,8 @@ export default {
             localStorage.setItem('token_type', tokenType)
             context.commit('retrieveTokenType', tokenType)
 
-            localStorage.setItem('user_type', userType)
-            context.commit('retrieveUserType', userType)
+            localStorage.setItem('user_roles', userRoles)
+            context.commit('retrieveUserRoles', userRoles)
 
             resolve(response)
           })
