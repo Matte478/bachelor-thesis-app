@@ -9,6 +9,8 @@ import typeOfEmployments from './modules/typeOfEmployments'
 
 Vue.use(Vuex)
 axios.defaults.baseURL = 'http://localhost/api'
+// axios.defaults.baseURL = 'https://obedovac-api.davedot.dev/api'
+
 
 export const store = new Vuex.Store({
   namespaced: true,

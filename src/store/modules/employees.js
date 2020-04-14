@@ -22,11 +22,10 @@ export default {
     fetchEmployees(context, employeeId) {
       axios.defaults.headers.common['Authorization'] = context.rootState.auth.tokenType + ' ' + context.rootState.auth.token
 
-      if (typeof employeeId == 'undefined')
-        employeeId = ''
+      employeeId = typeof employeeId == 'undefined' ? '' : '/' + employeeId
 
       return new Promise((resolve, reject) => {
-        axios.get('/employees/' + employeeId)
+        axios.get('employees' + employeeId)
           .then(response => {
             context.commit('fetchEmployees', response.data.data)
             resolve(response.data.data)

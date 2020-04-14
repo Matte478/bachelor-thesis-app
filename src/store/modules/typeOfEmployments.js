@@ -22,11 +22,10 @@ export default {
     fetchTypeOfEmployments(context, typeId) {
       axios.defaults.headers.common['Authorization'] = context.rootState.auth.tokenType + ' ' + context.rootState.auth.token
 
-      if (typeof typeId == 'undefined')
-        typeId = ''
+        typeId = typeof typeId == 'undefined' ? '' : '/' + typeId
 
       return new Promise((resolve, reject) => {
-        axios.get('/type-of-employments/' + typeId)
+        axios.get('/type-of-employments' + typeId)
           .then(response => {
             context.commit('fetchTypeOfEmployments', response.data.data)
             resolve(response.data.data)
