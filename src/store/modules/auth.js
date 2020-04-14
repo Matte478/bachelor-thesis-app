@@ -41,6 +41,9 @@ export default {
     destroyTokenType(state) {
       state.tokenType = null
     },
+    destroyUserRoles(state) {
+      state.userRoles = []
+    },
   },
 
   actions: {
@@ -79,6 +82,8 @@ export default {
               context.commit('destroyToken')
               localStorage.removeItem('token_type')
               context.commit('destroyTokenType')
+              localStorage.removeItem('user_roles')
+              context.commit('destroyUserRoles')
 
               resolve(response)
             })

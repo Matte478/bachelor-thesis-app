@@ -36,7 +36,7 @@
               </div>
             </span>
           </li>
-          <li v-if="loggedIn">
+          <li v-if="client || contractor">
             <router-link :to="{ name: 'admin' }">Administrácia</router-link>
           </li>
           <li v-if="loggedIn">
@@ -69,6 +69,9 @@ export default {
     client() {
       return this.$store.getters.loggedInClient
     },
+    contractor() {
+      return this.$store.getters.loggedInContractor
+    }
   },
 }
 </script>

@@ -33,6 +33,14 @@ router.beforeEach((to, from, next) => {
     } else {
       next()
     }
+  } else if (to.matched.some(record => record.meta.requiresAdmin)) {
+    if (!(store.getters.loggedInContractor || store.getters.loggedInClient)) {
+      next({
+        name: 'login',
+      })
+    } else {
+      next()
+    }
   } else if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!store.getters.loggedIn) {
       next({
@@ -43,9 +51,15 @@ router.beforeEach((to, from, next) => {
     }
   } else if (to.matched.some(record => record.meta.requiresVisitor)) {
     if (store.getters.loggedIn) {
-      next({
-        name: 'admin',
-      })
+      if (store.getters.loggedInContractor || store.getters.loggedInClient) {
+        next({
+          name: 'admin',
+        })
+      } else {
+        next({
+          name: 'orders',
+        })
+      }
     } else {
       next()
     }
