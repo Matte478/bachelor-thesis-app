@@ -88,12 +88,32 @@ export default {
       },
     }
   },
+
+  computed: {
+    page() {
+      let page = 'admin'
+      switch (this.$store.getters.userRoles[0]) {
+        case 'Employee':
+          page = 'orders'
+          break
+        case 'Client':
+          page = 'client-contractor'
+          break
+        case 'Contractor':
+          page = 'restaurant-dashboard'
+          break
+      }
+
+      return page;
+    },
+  },
+
   methods: {
     login() {
       this.$store
         .dispatch('retrieveToken', this.form)
         .then(() => {
-          this.$router.push({ name: 'admin' })
+          this.$router.push({ name: this.page })
           this.flashSuccess('Boli ste úspešne prihlásený.', {
             timeout: 3000,
           })

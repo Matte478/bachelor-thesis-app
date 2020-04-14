@@ -94,7 +94,7 @@ export default {
     },
     registerContractor(context, form) {
       return new Promise((resolve, reject) => {
-        axios.post('/registerContractor', form)
+        axios.post('/register-contractor', form)
           .then(response => {
             resolve(response)
           })
@@ -105,7 +105,7 @@ export default {
     },
     registerClient(context, form) {
       return new Promise((resolve, reject) => {
-        axios.post('/registerClient', form)
+        axios.post('/register-client', form)
           .then(response => {
             console.log(response)
             resolve(response)

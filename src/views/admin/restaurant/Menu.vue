@@ -25,7 +25,9 @@
         :meals="meals"
         @edit="openEditPopup"
         @delete="deleteMeal"
+        v-if="meals.length"
       />
+      <h3 v-else>Nemáte žiadne jedlo v ponuke</h3>
     </obd-card>
   </section>
 </template>
@@ -37,11 +39,13 @@ import MenuAddNew from './components/MenuAddNew'
 import MenuEdit from './components/MenuEdit'
 
 export default {
+  name: 'menu',
   components: {
     MenuTable,
     MenuAddNew,
     MenuEdit,
   },
+
   data() {
     return {
       initialized: false,
@@ -53,11 +57,7 @@ export default {
       editableId: '',
     }
   },
-  computed: {
-    mealsStr() {
-      return JSON.stringify(this.meals)
-    },
-  },
+  
   mounted() {
     this.loadMeals()
   },
