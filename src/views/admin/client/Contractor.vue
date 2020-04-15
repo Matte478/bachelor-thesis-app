@@ -13,7 +13,7 @@
           <h3 v-if="!confirmed">Dodávateľ ešte nepotvrdil vašu spoluprácu.</h3>
           <p>Názov reštaurácie: {{contractor.restaurant}}</p>
           <p>Mesto: {{contractor.city}}</p>
-          <p>A ďalšie informácie ...</p>
+          <!-- <p>A ďalšie informácie ...</p> -->
         </obd-card>
       </div>
     </div>

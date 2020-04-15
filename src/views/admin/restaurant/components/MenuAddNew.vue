@@ -5,6 +5,7 @@
     class="pop-up"
     modal-title="Pridať jedlo"
     modal-subtitle="Pridajte nové jedlo do ponuky"
+    max-width="500px"
   >
     <form
       class="form"
