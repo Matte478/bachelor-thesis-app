@@ -39,7 +39,7 @@ import MenuAddNew from './components/MenuAddNew'
 import MenuEdit from './components/MenuEdit'
 
 export default {
-  name: 'menu',
+  name: 'menuPage',
   components: {
     MenuTable,
     MenuAddNew,

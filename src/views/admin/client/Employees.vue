@@ -80,7 +80,8 @@ export default {
     },
 
     addedEmployee(employee) {
-      this.employees.push(employee);
+      this.employees.push(employee)
+      this.formatEmployees()
       this.closePopup()
     },
 
@@ -126,10 +127,17 @@ export default {
     },
 
     formatEmployees() {
-      this.employees = this.employees.map(function(e) {
-        e['id'] = e['user_id']
-        delete e['user_id']
-        return e
+      this.employees = this.employees.map(function(employee) {
+        if (
+          typeof employee['type-of-employment'] == 'undefined' ||
+          !employee['type-of-employment']
+        )
+          employee['type-of-employment'] = '-'
+
+        employee['id'] = employee['user_id']
+        delete employee['user_id']
+
+        return employee
       })
     },
   },

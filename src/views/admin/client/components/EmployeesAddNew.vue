@@ -144,6 +144,7 @@ export default {
             timeout: 3000,
           })
           this.$emit('added-employee', response)
+          this.newEmployee = {}
         })
         .catch(errors => {
           this.errors = errors
