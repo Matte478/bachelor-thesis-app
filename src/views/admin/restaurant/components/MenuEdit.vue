@@ -1,10 +1,12 @@
 <template>
   <obd-modal
+    v-if="notEmptyObject(editableMeal)"
     :active="active"
     @closed="closePopup"
     class="pop-up"
     modal-title="Upraviť jedlo"
     modal-subtitle="Upravte jedlo z ponuky"
+    max-width="500px"
   >
     <form
       class="form"
@@ -76,7 +78,7 @@ export default {
   },
 
   watch: {
-    mealId() {
+    active() {
       this.errors = {}
       this.loadMeal()
     },
@@ -85,6 +87,7 @@ export default {
   methods: {
     closePopup() {
       this.$emit('closed')
+      this.editableMeal = {}
     },
 
     loadMeal() {

@@ -1,6 +1,7 @@
 <template>
   <obd-modal
     class="pop-up"
+    max-width="1000px"
     v-if="order.meals"
     :active="active"
     modal-title="Detail objednávky"

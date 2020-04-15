@@ -21,8 +21,8 @@
         <obd-button @click="togglePopup">Pridať jedlo</obd-button>
       </div>
 
-      <menu-table
-        :meals="meals"
+      <obd-table-menu
+        :meals="JSON.stringify(meals)"
         @edit="openEditPopup"
         @delete="deleteMeal"
         v-if="meals.length"
@@ -34,14 +34,14 @@
 
 <script>
 import axios from 'axios'
-import MenuTable from './components/MenuTable'
+// import MenuTable from './components/MenuTable'
 import MenuAddNew from './components/MenuAddNew'
 import MenuEdit from './components/MenuEdit'
 
 export default {
   name: 'menuPage',
   components: {
-    MenuTable,
+    // MenuTable,
     MenuAddNew,
     MenuEdit,
   },
@@ -57,7 +57,7 @@ export default {
       editableId: '',
     }
   },
-  
+
   mounted() {
     this.loadMeals()
   },
@@ -98,8 +98,8 @@ export default {
       this.editMealPopup = false
     },
 
-    openEditPopup(mealId) {
-      this.editableId = mealId
+    openEditPopup(e) {
+      this.editableId = e.detail
       this.editMealPopup = true
     },
 
@@ -107,7 +107,8 @@ export default {
       this.editMealPopup = false
     },
 
-    deleteMeal(mealId) {
+    deleteMeal(e) {
+      const mealId = e.detail
       let response = confirm('Naozaj chcete vymazať dané jedlo?')
       if (response) {
         axios.defaults.headers.common['Authorization'] =
@@ -134,17 +135,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.pop-up {
-  position: fixed;
-  display: block;
-  z-index: 150;
-  width: 90%;
-  max-width: 500px;
-  left: 50%;
-  top: calc(50vh - 62px);
-  transform: translate(-50%, -50%);
-  visibility: visible;
-}
-</style>

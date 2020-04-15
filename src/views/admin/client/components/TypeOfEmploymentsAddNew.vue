@@ -5,6 +5,7 @@
     class="pop-up"
     modal-title="Pridať pracovný pomer"
     modal-subtitle="Pridajte nový druh pracovného pomeru a jeho príspevok"
+    max-width="500px"
   >
     <form
       class="form"

@@ -89,7 +89,6 @@ export default {
   methods: {
     openDetail(id) {
       let parsed = id.split('#')
-      console.log(this.orders[parsed[0]][parsed[1]])
       this.orderDetail = this.orders[parsed[0]][parsed[1]]
       this.modalSubtitle = this.formatDate(parsed[0]) + ' | ' + parsed[1]
       this.orderDetailPopup = true
@@ -117,7 +116,6 @@ export default {
         .then(response => {
           this.orders = response
           this.initialized = true
-          // console.log(this.notEmptyObject(response))
         })
         .catch(e => {
           console.log(e)

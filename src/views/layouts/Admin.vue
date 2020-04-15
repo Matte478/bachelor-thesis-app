@@ -8,12 +8,11 @@
       :class="{closed: isClosed}"
     >
       <nav class="sidebar">
-        <button
+        <obd-button-arrow
           class="sidebar__toggle"
           @click="toggleClose"
-        >
-          <i class="fas fa-angle-double-left"></i>
-        </button>
+        />
+
         <ul
           class="sidebar__menu"
           v-if="contractor"
@@ -120,10 +119,6 @@ export default {
   &.closed {
     flex-basis: 50px;
     width: 50px;
-
-    .sidebar__toggle {
-      transform: translateX(50%) rotate(180deg);
-    }
   }
 
   .sidebar {
@@ -138,26 +133,10 @@ export default {
 
     &__toggle {
       position: absolute;
-      display: inline-block;
-      padding: 5px;
-      width: 50px;
-      height: 50px;
       right: 0;
       bottom: 5%;
-      background-color: $color-primary-3;
-      border-radius: 50%;
-      @include font-size(35, 35);
       transform: translateX(50%);
       z-index: 100;
-      border: none;
-      outline: none;
-      color: $color-white;
-      cursor: pointer;
-      transition: all 0.2s ease-in-out;
-
-      .fas {
-        display: block;
-      }
     }
 
     .sidebar__menu {

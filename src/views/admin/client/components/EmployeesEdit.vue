@@ -1,9 +1,11 @@
 <template>
   <obd-modal
+    v-if="notEmptyObject(employee)"
     :active="active"
     @closed="closePopup"
     class="pop-up"
     modal-title="Upraviť existujúceho zamestnanca"
+    max-width="500px"
   >
     <form
       class="form"
@@ -174,6 +176,7 @@ export default {
 
     closePopup() {
       this.$emit('closed')
+      this.employee = {}
     },
   },
 }

@@ -6,6 +6,7 @@
     modal-title="Detail objednávky"
     :modal-subtitle="subtitle"
     v-if="order.meals"
+    max-width="1000px"
   >
     <div slot="controls">
       <h3 class="pop-up__price">Cena objednávky: <span>{{ order.price }}€</span></h3>

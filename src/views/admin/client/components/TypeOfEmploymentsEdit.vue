@@ -1,10 +1,12 @@
 <template>
   <obd-modal
+    v-if="notEmptyObject(editableType)"
     :active="active"
     @closed="closePopup"
     class="pop-up"
     modal-title="Upraviť pracovný pomer"
     modal-subtitle="Upravte existujúci pracovný pomer"
+    max-width="500px"
   >
     <form
       class="form"
@@ -86,6 +88,7 @@ export default {
   methods: {
     closePopup() {
       this.$emit('closed')
+      this.editableType = {}
     },
 
     loadType() {

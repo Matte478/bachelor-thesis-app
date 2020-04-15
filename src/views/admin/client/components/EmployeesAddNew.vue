@@ -4,6 +4,7 @@
     @closed="closePopup"
     class="pop-up"
     modal-title="Pridať nového zamestnanca"
+    max-width="500px"
   >
     <form
       class="form"

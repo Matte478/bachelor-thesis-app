@@ -4,6 +4,7 @@
     :active="active"
     @closed="closeFilter"
     modal-title="Filter objednávok"
+    max-width="500px"
   >
     <div class="container">
       <div class="row">

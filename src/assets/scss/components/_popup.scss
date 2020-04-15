@@ -1,12 +1,4 @@
 .pop-up {
-  position: fixed;
-  display: block;
-  z-index: 150;
-  width: 90%;
-  max-width: 1000px;
-  left: 50%;
-  top: calc(50vh - 62px);
-  transform: translate(-50%, -50%);
   visibility: visible;
 
   &__price {
@@ -14,7 +6,6 @@
   }
 
   &--filter {
-    max-width: 500px;
     text-align: center;
 
     .select {

@@ -128,9 +128,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.pop-up {
-  max-width: 500px;
-}
-</style>
