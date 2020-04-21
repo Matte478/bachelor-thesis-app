@@ -78,17 +78,16 @@ export default {
 
   watch: {
     active() {
-      this.errors = {}
-    },
-    typeId() {
+      if(!this.active) return
       this.loadType()
     },
   },
 
   methods: {
     closePopup() {
-      this.$emit('closed')
+      this.errors = {}
       this.editableType = {}
+      this.$emit('closed')
     },
 
     loadType() {

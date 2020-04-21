@@ -120,9 +120,8 @@ export default {
   },
 
   watch: {
-    employeeId() {
-      if (this.employeeId == '') return
-      this.errors = {}
+    active() {
+      if (!this.active) return
       this.loadEmployee()
     },
   },
@@ -175,8 +174,9 @@ export default {
     },
 
     closePopup() {
-      this.$emit('closed')
       this.employee = {}
+      this.errors = {}
+      this.$emit('closed')
     },
   },
 }
