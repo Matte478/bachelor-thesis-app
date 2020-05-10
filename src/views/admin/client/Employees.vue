@@ -22,23 +22,24 @@
         <obd-button @click="togglePopup">Pridať zamestnanca</obd-button>
       </div>
 
-      <employees-table
-        :employees="employees"
+      <obd-table-employees
+        :employees="JSON.stringify(employees)"
         @edit="openEditPopup"
         @delete="deleteEmployee"
+        v-if="employees.length"
       />
     </obd-card>
   </section>
 </template>
 
 <script>
-import EmployeesTable from './components/EmployeesTable'
+// import EmployeesTable from './components/EmployeesTable'
 import EmployeesAddNew from './components/EmployeesAddNew'
 import EmployeesEdit from './components/EmployeesEdit'
 
 export default {
   components: {
-    EmployeesTable,
+    // EmployeesTable,
     EmployeesAddNew,
     EmployeesEdit,
   },
@@ -60,8 +61,8 @@ export default {
   },
 
   methods: {
-    openEditPopup(id) {
-      this.editableId = id
+    openEditPopup(e) {
+      this.editableId = e.detail
       this.editEmployeePopup = true
     },
 
@@ -90,7 +91,8 @@ export default {
       this.closeEditPopup()
     },
 
-    deleteEmployee(id) {
+    deleteEmployee(e) {
+      const id = e.detail
       let response = confirm('Naozaj chcete vymazať daného zamestnanca?')
       if (response) {
         this.$store
