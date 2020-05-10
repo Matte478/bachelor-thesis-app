@@ -4,12 +4,13 @@
     card-subtitle="Môžete si vybrať jedného z vášho mesta"
   >
     <obd-table
-      v-if="restaurants"
+      v-if="restaurants.length > 1"
       :data="restaurantsStr"
       :columns="JSON.stringify(columns)"
       :actions="JSON.stringify(tableActions)"
       @action="action"
     />
+    <h3 v-else>Ľutujeme, neevidujeme žiadneho dodávateľa z Vášho mesta.</h3>
   </obd-card>
 </template>
 
@@ -45,7 +46,7 @@ export default {
     },
   },
   created() {
-    this.loadRestaurands()
+    this.loadRestaurants()
   },
   methods: {
     action(e) {
@@ -83,7 +84,7 @@ export default {
       }
     },
 
-    loadRestaurands() {
+    loadRestaurants() {
       axios.defaults.headers.common['Authorization'] =
         this.$store.state.auth.tokenType + ' ' + this.$store.state.auth.token
 
@@ -93,7 +94,6 @@ export default {
           this.restaurants = response.data.data
         })
         .catch(error => {
-          console.log(error)
           this.flashError(
             'Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.',
           )
