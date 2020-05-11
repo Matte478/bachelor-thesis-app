@@ -3,6 +3,8 @@
     <orders-detail
       :active="orderDetailPopup"
       :subtitle="modalSubtitle"
+      :company="companyDetail"
+      :date="dateDetail"
       :order="orderDetail"
       @closed="closeDetail"
     />
@@ -65,6 +67,8 @@ export default {
       filterPopup: false,
       view: 'days',
 
+      companyDetail: '',
+      dateDetail: '',
       orderDetail: [],
       orderDetailPopup: false,
       modalSubtitle: '',
@@ -114,7 +118,8 @@ export default {
     openDetail(id) {
       let parsed = id.split('#')
       this.orderDetail = this.orders[parsed[0]][parsed[1]]
-      this.modalSubtitle = this.formatDate(parsed[0]) + ' | ' + parsed[1]
+      this.companyDetail = parsed[1]
+      this.dateDetail = parsed[0]
       this.orderDetailPopup = true
     },
 

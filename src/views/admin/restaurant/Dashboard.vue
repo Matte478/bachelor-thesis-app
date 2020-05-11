@@ -2,7 +2,8 @@
   <section class="section section--dashboard">
     <orders-detail
       :active="orderDetailPopup"
-      :subtitle="modalSubtitle"
+      :company="companyDetail"
+      :date="dateDetail"
       :order="orderDetail"
       @closed="closeDetail"
     />
@@ -47,8 +48,9 @@ export default {
       orders: [],
 
       orderDetailPopup: false,
-      modalSubtitle: '',
       orderDetail: [],
+      companyDetail: '',
+      dateDetail: '',
     }
   },
 
@@ -58,8 +60,7 @@ export default {
       .dispatch('orders/fetchOrders', filter)
       .then(() => {
         let orders = this.$store.getters['orders/getOrders']
-        if(this.notEmptyObject(orders))
-          this.orders = orders[this.getToday()]
+        if (this.notEmptyObject(orders)) this.orders = orders[this.getToday()]
         this.initialized = true
       })
       .catch(e => {
@@ -76,7 +77,8 @@ export default {
     openDetail(id) {
       let parsed = id.split('#')
       this.orderDetail = this.orders[parsed[1]]
-      this.modalSubtitle = this.formatDate(parsed[0]) + ' | ' + parsed[1]
+      this.companyDetail = parsed[1]
+      this.dateDetail = parsed[0]
       this.orderDetailPopup = true
     },
   },

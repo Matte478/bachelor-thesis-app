@@ -27,6 +27,10 @@ export default {
           key: 'price',
           text: 'Cena objednávky',
         },
+        {
+          key: 'status',
+          text: 'Stav objednávky',
+        },
       ],
       tableActions: [
         {
@@ -48,6 +52,7 @@ export default {
           id: date + '#' + key,
           company: key,
           price: parsedobj[key].price + '€',
+          status: parsedobj[key].status,
         })
       })
 
