@@ -62,6 +62,7 @@ export default {
 
   methods: {
     openEditPopup(e) {
+      console.log(e)
       this.editableId = e.detail
       this.editEmployeePopup = true
     },
@@ -136,8 +137,10 @@ export default {
         )
           employee['type-of-employment'] = '-'
 
-        employee['id'] = employee['user_id']
-        delete employee['user_id']
+        if (typeof employee['user_id'] != 'undefined') {
+          employee['id'] = employee['user_id']
+          delete employee['user_id']
+        }
 
         return employee
       })
