@@ -5,6 +5,7 @@
       :company="companyDetail"
       :date="dateDetail"
       :order="orderDetail"
+      :show-status="true"
       @closed="closeDetail"
     />
 
@@ -18,6 +19,7 @@
         <orders-table
           :date="getToday()"
           :orders="orders"
+          :show-status="true"
           @detail="openDetail"
         />
 

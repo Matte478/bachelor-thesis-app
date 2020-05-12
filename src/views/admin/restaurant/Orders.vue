@@ -2,10 +2,10 @@
   <section class="section">
     <orders-detail
       :active="orderDetailPopup"
-      :subtitle="modalSubtitle"
       :company="companyDetail"
       :date="dateDetail"
       :order="orderDetail"
+      :show-status="false"
       @closed="closeDetail"
     />
 
@@ -71,7 +71,6 @@ export default {
       dateDetail: '',
       orderDetail: [],
       orderDetailPopup: false,
-      modalSubtitle: '',
     }
   },
   computed: {

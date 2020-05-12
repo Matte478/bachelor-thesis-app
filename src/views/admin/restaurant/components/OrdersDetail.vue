@@ -10,8 +10,14 @@
   >
     <div slot="controls">
       <h3 class="pop-up__price">Cena objednávky: <span>{{ order.price }}€</span></h3>
-      <h3 class="pop-up__status">Stav objednávky:</h3>
-      <div class="select">
+      <h3
+        class="pop-up__status"
+        v-if="showStatus"
+      >Stav objednávky:</h3>
+      <div
+        class="select"
+        v-if="showStatus"
+      >
         <v-select
           v-model="order.status"
           :clearable="false"
@@ -37,14 +43,14 @@ import axios from 'axios'
 import timeMixin from '../../../../assets/mixins/timeMixin'
 
 export default {
-  props: ['active', 'order', 'company', 'date'],
+  props: ['active', 'order', 'company', 'date', 'showStatus'],
   mixins: [timeMixin],
-  
+
   data() {
     return {
       status: ['čaká na prípravu', 'pripravuje sa', 'na rozvoze', 'doručené'],
       disabledStatus: true,
-      
+
       subtitle: '',
 
       columns: [
@@ -70,7 +76,7 @@ export default {
     },
     date() {
       this.disabledStatus = this.date != this.getToday()
-    }
+    },
   },
 
   methods: {

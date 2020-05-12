@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  props: ['orders', 'date', 'formated-date'],
+  props: ['orders', 'date', 'formated-date', 'showStatus'],
 
   data() {
     return {
@@ -27,10 +27,6 @@ export default {
           key: 'price',
           text: 'Cena objednávky',
         },
-        {
-          key: 'status',
-          text: 'Stav objednávky',
-        },
       ],
       tableActions: [
         {
@@ -39,6 +35,15 @@ export default {
           color: '#2d4059',
         },
       ],
+    }
+  },
+
+  created() {
+    if (this.showStatus) {
+      this.columns.push({
+        key: 'status',
+        text: 'Stav objednávky',
+      })
     }
   },
 
