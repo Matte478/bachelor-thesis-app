@@ -4,7 +4,7 @@
     card-subtitle="Môžete si vybrať jedného z vášho mesta"
   >
     <obd-table
-      v-if="restaurants.length > 1"
+      v-if="restaurants.length"
       :data="restaurantsStr"
       :columns="JSON.stringify(columns)"
       :actions="JSON.stringify(tableActions)"
@@ -20,7 +20,7 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      restaurants: '',
+      restaurants: [],
       tableActions: [
         {
           text: 'Vybrať',
@@ -69,7 +69,6 @@ export default {
             restaurant_id: restaurantId,
           })
           .then(response => {
-            this.restaurants = response.data.data
             this.flashSuccess(
               'Dodávateľ bol zvolený. Teraz musíte počkať na schválenie.',
               {

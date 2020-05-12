@@ -9,6 +9,7 @@
         class="unconfirmed"
         :clients="unconfirmedClients"
         @confirm="confirmAgreement"
+        @unconfirm="unconfirmAgreement"
       />
 
       <clients-confirmed :clients="confirmedClients" />
@@ -32,23 +33,6 @@ export default {
       initialized: false,
       confirmedClients: [],
       unconfirmedClients: [],
-      columns: [
-        {
-          key: 'company',
-          text: 'Klient',
-        },
-        {
-          key: 'city',
-          text: 'Mesto',
-        },
-      ],
-      tableActions: [
-        {
-          text: 'Schváliť',
-          action: 'confirm',
-          color: '#f07b3f',
-        },
-      ],
     }
   },
 
@@ -69,9 +53,12 @@ export default {
           this.initialized = true
         })
         .catch(error => {
-          this.flashError('Niečo sa pokazilo, nebolo možné načítať dodávateľa.', {
-            timeout: 3000,
-          })
+          this.flashError(
+            'Niečo sa pokazilo, nebolo možné načítať dodávateľa.',
+            {
+              timeout: 3000,
+            },
+          )
         })
     },
 
@@ -108,8 +95,25 @@ export default {
         axios
           .post('/agreements/' + id + '/confirm')
           .then(response => {
-            this.restaurants = response.data.data
             this.flashSuccess('Klient bol schválený.', {
+              timeout: 3000,
+            })
+            this.loadContractor()
+          })
+          .catch(error => {
+            this.flashError(error.response.data.error)
+          })
+      }
+    },
+
+    unconfirmAgreement(id) {
+      let response = confirm('Naozaj chcete zamietnúť danú žiadosť?')
+
+      if (response) {
+        axios
+          .post('/agreements/' + id + '/unconfirm')
+          .then(response => {
+            this.flashSuccess('Klient bol zamietnutý.', {
               timeout: 3000,
             })
             this.loadContractor()

@@ -34,7 +34,12 @@ export default {
         {
           text: 'Schváliť',
           action: 'confirm',
-          color: '#f07b3f',
+          color: '#2d4059',
+        },
+        {
+          text: 'Zamietnúť',
+          action: 'unconfirm',
+          color: '#ea5455',
         },
       ],
     }
