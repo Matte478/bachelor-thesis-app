@@ -69,7 +69,9 @@ export default {
           this.initialized = true
         })
         .catch(error => {
-          console.log(error)
+          this.flashError('Niečo sa pokazilo, nebolo možné načítať dodávateľa.', {
+            timeout: 3000,
+          })
         })
     },
 

@@ -62,7 +62,6 @@ export default {
 
   methods: {
     openEditPopup(e) {
-      console.log(e)
       this.editableId = e.detail
       this.editEmployeePopup = true
     },
@@ -109,6 +108,9 @@ export default {
           .catch(e => {
             this.flashError(
               'Niečo sa pokazilo, nebolo možné vymazať pracovný pomer.',
+              {
+                timeout: 3000,
+              },
             )
           })
       }
@@ -125,6 +127,9 @@ export default {
         .catch(e => {
           this.flashError(
             'Niečo sa pokazilo, nebolo možné načítať druhy pracovných pomerov.',
+            {
+              timeout: 3000,
+            },
           )
         })
     },

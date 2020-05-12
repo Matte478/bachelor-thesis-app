@@ -147,6 +147,9 @@ export default {
         .catch(e => {
           this.flashError(
             'Niečo sa pokazilo, nebolo možné načítať zoznam zamestnancov.',
+            {
+              timeout: 3000,
+            },
           )
         })
     },

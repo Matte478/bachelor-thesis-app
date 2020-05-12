@@ -118,9 +118,11 @@ export default {
           this.initialized = true
         })
         .catch(e => {
-          console.log(e)
           this.flashError(
             'Niečo sa pokazilo, nebolo možné načítať objednávky.<br>Skúste obnoviť stránku.',
+            {
+              timeout: 3000,
+            },
           )
         })
     },

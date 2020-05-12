@@ -97,30 +97,36 @@ export default {
   methods: {
     loadOrders() {
       this.$store.dispatch('fetchMeals').catch(e => {
-      if (e.response.status == 401)
-        this.errorMessage = 'Nemáte žiadneho dodávateľa jedál'
-      else
-        this.flashError(
-          'Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.',
-        )
-    })
+        if (e.response.status == 401)
+          this.errorMessage = 'Nemáte žiadneho dodávateľa jedál'
+        else
+          this.flashError(
+            'Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.',
+            {
+              timeout: 3000,
+            },
+          )
+      })
 
-    let filter =
-      '?filter[date_from]=' +
-      this.getWeekStart() +
-      '&filter[date_to]=' +
-      this.getWeekEnd()
-    this.$store
-      .dispatch('orders/fetchEmployeeOrders', filter)
-      .then(() => {
-        this.weekOrders = this.$store.getters['orders/getOrders']
-        this.formatWeekOrders()
-      })
-      .catch(e => {
-        this.flashError(
-          'Niečo sa pokazilo, nebolo možné načítať objednávky.<br>Skúste obnoviť stránku.',
-        )
-      })
+      let filter =
+        '?filter[date_from]=' +
+        this.getWeekStart() +
+        '&filter[date_to]=' +
+        this.getWeekEnd()
+      this.$store
+        .dispatch('orders/fetchEmployeeOrders', filter)
+        .then(() => {
+          this.weekOrders = this.$store.getters['orders/getOrders']
+          this.formatWeekOrders()
+        })
+        .catch(e => {
+          this.flashError(
+            'Niečo sa pokazilo, nebolo možné načítať objednávky.<br>Skúste obnoviť stránku.',
+            {
+              timeout: 3000,
+            },
+          )
+        })
     },
 
     // this method add empty order to weekOrder,
@@ -151,9 +157,11 @@ export default {
           })
         })
         .catch(e => {
-          console.log(e)
           this.flashError(
             'Niečo sa pokazilo, nebolo možné načítať objednávky.<br>Skúste obnoviť stránku.',
+            {
+              timeout: 3000,
+            },
           )
         })
     },

@@ -78,7 +78,7 @@ export default {
 
   watch: {
     active() {
-      if(!this.active) return
+      if (!this.active) return
       this.loadType()
     },
   },
@@ -99,7 +99,9 @@ export default {
           ]
         })
         .catch(e => {
-          this.flashError('Niečo sa pokazilo.')
+          this.flashError('Niečo sa pokazilo.', {
+            timeout: 3000,
+          })
         })
     },
 

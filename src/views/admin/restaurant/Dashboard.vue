@@ -66,6 +66,9 @@ export default {
       .catch(e => {
         this.flashError(
           'Niečo sa pokazilo, nebolo možné načítať objednávky.<br>Skúste obnoviť stránku.',
+          {
+            timeout: 3000,
+          },
         )
       })
   },

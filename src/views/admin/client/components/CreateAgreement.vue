@@ -96,6 +96,9 @@ export default {
         .catch(error => {
           this.flashError(
             'Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.',
+            {
+              timeout: 3000,
+            },
           )
         })
     },

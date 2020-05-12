@@ -22,7 +22,7 @@
       <div slot="controls">
         <obd-button @click="togglePopup">Pridať pracovný pomer</obd-button>
       </div>
-      
+
       <type-of-employments-table
         :type-of-employments="typeOfEmployments"
         @edit="openEdit"
@@ -89,6 +89,9 @@ export default {
         .catch(e => {
           this.flashError(
             'Niečo sa pokazilo, nebolo možné načítať objednávky.<br>Skúste obnoviť stránku.',
+            {
+              timeout: 3000,
+            },
           )
         })
     },
@@ -121,6 +124,9 @@ export default {
           .catch(e => {
             this.flashError(
               'Niečo sa pokazilo, nebolo možné vymazať pracovný pomer.',
+              {
+                timeout: 3000,
+              },
             )
           })
       }

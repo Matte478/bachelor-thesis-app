@@ -112,7 +112,6 @@ export default {
       return new Promise((resolve, reject) => {
         axios.post('/register-client', form)
           .then(response => {
-            console.log(response)
             resolve(response)
           })
           .catch(error => {

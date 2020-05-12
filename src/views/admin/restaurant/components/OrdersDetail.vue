@@ -107,7 +107,6 @@ export default {
           })
         })
         .catch(error => {
-          console.log(error.response)
           this.flashError('Nebolo možné upraviť stav objednávky.', {
             timeout: 3000,
           })

@@ -145,7 +145,12 @@ export default {
           })
         })
         .catch(error => {
-          console.log(error)
+          this.flashError(
+            'Niečo sa pokazilo, nebolo možné načítať zoznam klientov.',
+            {
+              timeout: 3000,
+            },
+          )
         })
     },
 

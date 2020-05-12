@@ -133,6 +133,9 @@ export default {
         .catch(e => {
           this.flashError(
             'Niečo sa pokazilo, nebolo možné načítať druhy pracovných pomerov.',
+            {
+              timeout: 3000,
+            },
           )
         })
     },

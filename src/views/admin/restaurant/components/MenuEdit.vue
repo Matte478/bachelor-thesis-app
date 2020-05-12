@@ -100,9 +100,11 @@ export default {
           this.editableMeal = response.data.data
         })
         .catch(error => {
-          console.log(error)
           this.flashError(
             'Niečo sa pokazilo, nebolo možné načítať obsah stránky.<br>Skúste obnoviť stránku.',
+            {
+              timeout: 3000,
+            },
           )
         })
     },
