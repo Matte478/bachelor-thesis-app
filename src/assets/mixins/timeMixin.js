@@ -30,13 +30,19 @@ export default {
   },
   methods: {
     getWeekStart: function (format) {
-      return time.getWeekStart(format);
+      return time.getWeekStart(format)
     },
     getWeekEnd: function (format) {
       return time.getWeekEnd(format)
     },
     getWeekRange: function (format) {
       return time.getWeekRange(format)
+    },
+    getMonthStart: function (format) {
+      return time.getMonthStart(format)
+    },
+    getMonthEnd: function (format) {
+      return time.getMonthEnd(format)
     },
     getToday: function (format) {
       return time.getToday(format)

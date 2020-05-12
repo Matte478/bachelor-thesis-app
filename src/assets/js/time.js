@@ -30,6 +30,7 @@ export default {
 
     return currentDate.startOf('isoWeek').format(format)
   },
+
   getWeekEnd: function (format) {
     let currentDate = moment()
     let today = currentDate.isoWeekday()
@@ -45,6 +46,7 @@ export default {
 
     return currentDate.weekday(5).format(format)
   },
+
   getWeekRange: function (format) {
     if (typeof format == 'undefined')
       format = 'YYYY-MM-DD'
@@ -54,15 +56,36 @@ export default {
 
     return start + ' - ' + end
   },
+
+  getMonthStart: function (format) {
+    let currentDate = moment()
+
+    if (typeof format == 'undefined')
+      format = 'YYYY-MM-DD'
+
+    return currentDate.startOf('month').format(format)
+  },
+
+  getMonthEnd: function (format) {
+    let currentDate = moment()
+
+    if (typeof format == 'undefined')
+      format = 'YYYY-MM-DD'
+      
+    return currentDate.endOf('month').format(format)
+  },
+
   getToday: function (format) {
     if (typeof format == 'undefined')
       format = 'YYYY-MM-DD'
 
     return moment().format(format)
   },
+
   isPassedDate: function (date) {
     return moment().isAfter(date)
   },
+
   formatDate: function (date, format) {
     if (typeof format == 'undefined')
       format = 'DD.MM.YYYY'

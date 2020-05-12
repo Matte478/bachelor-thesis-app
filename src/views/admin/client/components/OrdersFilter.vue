@@ -84,9 +84,11 @@
 <script>
 import axios from 'axios'
 import moment from 'moment'
+import timeMixin from '../../../../assets/mixins/timeMixin'
 
 export default {
   props: ['active'],
+  mixins: [timeMixin],
 
   data() {
     return {
@@ -128,6 +130,8 @@ export default {
 
   created() {
     this.loadEmployees()
+    this.dateFrom = this.getMonthStart()
+    this.dateTo = this.getMonthEnd()
   },
 
   methods: {
