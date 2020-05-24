@@ -128,7 +128,7 @@ export default {
     height: calc(100vh - 68px);
     z-index: 5;
     color: $color-white;
-    overflow: hidden scroll;
+    overflow: hidden auto;
     background-color: lighten($color-primary-1, 4%);
 
     &__toggle {

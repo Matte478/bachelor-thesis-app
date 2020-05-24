@@ -71,7 +71,7 @@ export default {
     },
     contractor() {
       return this.$store.getters.loggedInContractor
-    }
+    },
   },
 }
 </script>
